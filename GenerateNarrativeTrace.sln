@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{DE393AC9-9DF1-D33D-94C8-DAB7FDE4BC81}") = "GenerateNarrativeTrace", "Assembly-CSharp.csproj", "{E26F4AE2-0C9E-657D-47F2-2A1D78E857FC}"
+EndProject
+Project("{DE393AC9-9DF1-D33D-94C8-DAB7FDE4BC81}") = "GenerateNarrativeTrace", "Assembly-CSharp-Editor.csproj", "{3D32826E-37B9-63D0-4915-FE807784A6B2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E26F4AE2-0C9E-657D-47F2-2A1D78E857FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E26F4AE2-0C9E-657D-47F2-2A1D78E857FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E26F4AE2-0C9E-657D-47F2-2A1D78E857FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E26F4AE2-0C9E-657D-47F2-2A1D78E857FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D32826E-37B9-63D0-4915-FE807784A6B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D32826E-37B9-63D0-4915-FE807784A6B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D32826E-37B9-63D0-4915-FE807784A6B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D32826E-37B9-63D0-4915-FE807784A6B2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
