@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace BehaviorTrees {
 	
@@ -7,20 +8,18 @@ namespace BehaviorTrees {
 
 		public string name = "Smart Object";
 		public string relName = "";
-		/*
-		// Use this for initialization
-		void Start () {
-		
-		}
-		
-		// Update is called once per frame
-		void Update () {
-		
-		}
-		*/
 
-		//public SmartObject(string name) {
-		//	this.name = name;
-		//}
+		// Returns all the supported affordances types of the character
+		public List<System.Type> GetSupportedAffordances() {
+
+			List<System.Type> affTypes = new List<System.Type> ();
+			System.Reflection.FieldInfo[] members = this.GetType ().GetFields ();
+			foreach (System.Reflection.FieldInfo member in members) {
+				if (member.FieldType.BaseType == typeof(BehaviorTrees.Affordance)) {
+					affTypes.Add(member.FieldType);
+				}
+			}
+			return affTypes;
+		}
 	}
 }
