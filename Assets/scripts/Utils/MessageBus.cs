@@ -1,41 +1,42 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 public static class MessageBus {
 
 	static string trace = "";
-	static string traceMsg = "";
+	static List<TraceMessage> traceMsgs = new List<TraceMessage>();
 	static bool unread = false;
-	static string actor1 = "";
-	static string actor2 = "";
 
 	public static void PublishMessage(string msg, string actorName1, string actorName2) {
-
-		actor1 = actorName1;
-		actor2 = actorName2;
-		traceMsg = msg;
-		trace = trace + traceMsg;
+		
+		traceMsgs.Add (new TraceMessage (msg, actorName1, actorName2));
+		trace = trace + msg;
 		unread = true;
 	}
 
-	public static bool MsgContainsActor(string actorName) {
+	public static bool MsgsContainsActor(string actorName, out List<string> msgText) {
 
-		if (actorName.Equals (actor1) || actorName.Equals (actor2))
+		msgText = new List<string> ();
+		foreach (TraceMessage tMsg in traceMsgs) {
+			if (tMsg.HasActorInMsg (actorName))
+				msgText.Add (tMsg.GetMessage ());
+		}
+
+		if (msgText.Count != 0)
 			return true;
 		else
 			return false;
 		
 	}
 
-	public static bool HasUnreadMsg() {
+	public static bool HasUnreadMsgs() {
 
 		return unread;
 	}
 
 	public static void ResetMsgBus() {
 		
-		actor1 = "";
-		actor2 = "";
-		traceMsg = "";
+		traceMsgs = new List<TraceMessage> ();
 		unread = false;
 	}
 }

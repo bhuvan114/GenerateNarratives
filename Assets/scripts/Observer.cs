@@ -15,7 +15,7 @@ public class Observer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (MessageBus.HasUnreadMsg ()) {
+		if (MessageBus.HasUnreadMsgs ()) {
 
 
 		}
@@ -29,7 +29,11 @@ public class Observer : MonoBehaviour {
 	 * type has a 'name' field. This function should return the names
 	 * of all the objects with tag 'SmartObject' in its field of view.
 	*/
+	//TODO : To be implemented (@Kuan)
 	List<string> GetObjectsInFieldOfView () {
 
+		List<string> objNames = new List<string> ();
+
+		return objNames;
 	}
 }
