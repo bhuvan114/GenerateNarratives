@@ -1,0 +1,8 @@
+### Project Settings ###
+*.csproj
+*.userprefs
+*.sln
+*.unitypackage
+ProjectSettings/*
+obj/*
+Build/*
