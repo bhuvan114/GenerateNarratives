@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/_Scenes/PBT_Conversation.unity
+- path: Assets/_Scenes/TestAM_PBT.unity
   isLoaded: 1
   isActive: 1

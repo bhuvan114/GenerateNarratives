@@ -5,8 +5,11 @@ using TreeSharpPlus;
 
 public class GoTo : Affordance {
 
+	Vector3 pos;
+
 	public GoTo (SmartCharacter afdnt, SmartPlace afdee) {
 
+		pos = afdee.GetPosition ();
 		affordant = afdnt;
 		affordee = afdee;
 		initialize ();
@@ -14,7 +17,7 @@ public class GoTo : Affordance {
 
 	void initialize() {
 
-		name = affordant.name + " / walks_to / " + affordee.name;
+		name = affordant.name + " walks_to " + affordee.name;
 
 		effects.Add (new Condition (affordant.name, "reached", true));
 	}
@@ -23,7 +26,6 @@ public class GoTo : Affordance {
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return new LeafInvoke (
-			() => this.AddSummaryToTrace ());
+		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.PublisMsgNode()));
 	}
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BehaviorTrees {
 	
-	public class SmartObject /*: MonoBehaviour*/ {
+	public class SmartObject : MonoBehaviour {
 
 		public string name = "Smart Object";
 		public string relName = "";
@@ -21,5 +21,13 @@ namespace BehaviorTrees {
 			}
 			return affTypes;
 		}
+
+		/*public override bool Equals(SmartObject obj) {
+
+			if (obj == null)
+				return false;
+
+			return (name == obj.name);
+		}*/
 	}
 }

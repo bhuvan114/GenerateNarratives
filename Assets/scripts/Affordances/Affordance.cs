@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using TreeSharpPlus;
 
 namespace BehaviorTrees {
 	public class Affordance {
@@ -28,6 +29,17 @@ namespace BehaviorTrees {
 		public void AddSummaryToTrace () {
 
 			Constants.PBT_Trace = Constants.PBT_Trace + this.actionSummary ();
+		}
+
+		public void publishMessage () {
+			TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
+			MessageBus.PublishMessage (this.asString (), affordant.name, affordee.name);
+		}
+
+		public Node PublisMsgNode () {
+
+			return new LeafInvoke (
+				() => this.publishMessage());
 		}
 	}
 }
