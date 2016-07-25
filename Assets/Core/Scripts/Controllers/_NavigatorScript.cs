@@ -51,7 +51,7 @@ public class _NavigatorScript : MonoBehaviour
 
     void OnAnimatorMove()
     {
-        agent.velocity = animator.deltaPosition / Time.deltaTime;
+		agent.velocity = (Time.deltaTime != 0) ? animator.deltaPosition / Time.deltaTime : Vector3.zero;
         transform.rotation = animator.rootRotation;
         // get a "forward vector" for each rotation
         var forwardA = transform.rotation * Vector3.forward;

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/_Scenes/ReAnimate.unity
+- path: Assets/_Scenes/TestAM_PBT.unity
   isLoaded: 1
   isActive: 1
