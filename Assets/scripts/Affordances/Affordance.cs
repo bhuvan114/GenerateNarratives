@@ -41,5 +41,15 @@ namespace BehaviorTrees {
 			return new LeafInvoke (
 				() => this.publishMessage());
 		}
+
+		public bool Equals(Affordance aff) {
+
+			if (aff == null)
+				return false;
+			else if (this.asString () == aff.asString ())
+				return true;
+			else
+				return false;
+		}
 	}
 }

@@ -11,26 +11,6 @@ public class TestAM_PBT : MonoBehaviour {
 	public SmartPlace meetPlace1;
 	public SmartPlace meetPlace2;
 
-	private BehaviorAgent behaviorAgent;
-	private List<Observer> observers;
-	// Use this for initialization
-	void Start () {
-
-		PopulateObserversInScene ();
-		behaviorAgent = new BehaviorAgent (this.BuildTree ());
-		BehaviorManager.Instance.Register (behaviorAgent);
-		behaviorAgent.StartBehavior ();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
-	void PopulateObserversInScene () {
-
-		Object[] objs = GameObject.FindObjectsOfType (typeof(Observer));
-	}
 
 	// Write your PBT in this funtion. The last node of the PBT should always be this.TerminateTree()
 	public Node BuildTree() {
@@ -42,12 +22,8 @@ public class TestAM_PBT : MonoBehaviour {
 
 
 		//PBT here
-		return new Sequence (danGoes.PBT (), robGoes.PBT (), this.TerminateTree());
+		return new Sequence (danGoes.PBT (), robGoes.PBT ());
 	}
 
-	public Node TerminateTree () {
 
-		return new LeafInvoke (
-			() => MessageBus.SaveTraces ());
-	}
 }
