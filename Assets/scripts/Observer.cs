@@ -2,6 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
+/* This script is attached to objects with an auto-biograpical
+ * memory. The observer will only recored events which it does
+ * or sees 
+ */
+
 public class Observer : MonoBehaviour {
 
 	List<string> observerTrace = new List<string>();
@@ -11,7 +16,7 @@ public class Observer : MonoBehaviour {
 	Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
 	Quaternion stepAngle = Quaternion.AngleAxis(4, Vector3.up);
 
-	// Use this for initialization
+	// Get the name of the character that the observer is attached to.
 	void Start () {
 
 		obsName = this.gameObject.GetComponent<SmartCharacter> ().name;
@@ -20,11 +25,13 @@ public class Observer : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		// If the msgs in the msg bus are read, set it to false
 		if (msgRead) {
 			MessageBus.ResetMsgBus ();
 			msgRead = false;
 		}
 
+		// If msg bus has any unread msgs, get them
 		if (MessageBus.HasUnreadMsgs ()) {
 			
 			List<string> msgs = MessageBus.GetMsgsInMsgBus ();
@@ -35,7 +42,7 @@ public class Observer : MonoBehaviour {
 		}
 
 
-
+		// When program ends, save trace
 		if (MessageBus.killSignal) {
 			SaveObserverTrace ();
 			msgRead = true;
@@ -45,6 +52,11 @@ public class Observer : MonoBehaviour {
 	}
 
 
+	/* Return the msgs that are related-to (in field-of-view)
+	 * of the observer.
+	 * Input  : List of msgs
+	 * Return : List of msgs in first person.
+	 */
 	List<string> GetMsgsForObserver (List<string> msgs) {
 
 		//Debug.Log ("Name : " + obsName);
@@ -108,10 +120,14 @@ public class Observer : MonoBehaviour {
 		return objs;
 	}
 
+	// Saves the observer trace to a text file
 	public void SaveObserverTrace () {
 
 		Debug.Log ("Observer " + obsName + " : ");
-		foreach (string msg in observerTrace)
+		string fileName = Constants.traceFilesPath + obsName + ".txt";
+		string[] msgList = observerTrace.ToArray ();
+		System.IO.File.WriteAllLines (fileName, msgList);
+		foreach (string msg in msgList)
 			Debug.Log (msg);
 	}
 }

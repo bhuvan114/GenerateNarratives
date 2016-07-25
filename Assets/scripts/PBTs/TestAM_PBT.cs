@@ -32,6 +32,7 @@ public class TestAM_PBT : MonoBehaviour {
 		Object[] objs = GameObject.FindObjectsOfType (typeof(Observer));
 	}
 
+	// Write your PBT in this funtion. The last node of the PBT should always be this.TerminateTree()
 	public Node BuildTree() {
 
 

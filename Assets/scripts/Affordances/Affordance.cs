@@ -14,7 +14,7 @@ namespace BehaviorTrees {
 
 		public string asString () {
 
-			return this.name + "\n";
+			return this.name;
 		}
 
 		public string actionSummary () {

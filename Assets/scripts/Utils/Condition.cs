@@ -2,6 +2,10 @@
 using System.Collections;
 
 namespace BehaviorTrees {
+	/* A condition class type to define preconditions and post-conditions
+	 * for the affordances. A condition has the actor name, condition name,
+	 * and the state of the condition.
+	 */
 	public class Condition {
 		string actor;
 		string cond;

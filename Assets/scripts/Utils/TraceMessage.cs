@@ -1,5 +1,9 @@
 ﻿using System.Collections;
 
+/* Messages that are present in the  Message bus are of TraceMessage
+ * type. It has the names of actor1 and actor2, and the message.
+ */
+
 public class TraceMessage{
 
 	string msg, actor1, actor2;
