@@ -12,6 +12,7 @@ public class Observer : MonoBehaviour {
 	List<string> observerTrace = new List<string>();
 	string obsName;
 	bool msgRead = false;
+	int visionFieldLength = 30;
 
 	Quaternion startingAngle = Quaternion.AngleAxis(-60, Vector3.up);
 	Quaternion stepAngle = Quaternion.AngleAxis(4, Vector3.up);
@@ -47,7 +48,7 @@ public class Observer : MonoBehaviour {
 			SaveObserverTrace ();
 			msgRead = true;
 		}
-
+		GetObjectsInFieldOfView ();
 		//DetectObjectsInFOV ();
 	}
 
@@ -67,9 +68,9 @@ public class Observer : MonoBehaviour {
 			int indx = msg.IndexOf (obsName);
 			if (indx != -1) {
 				string newMsg = msg;
-				if (indx == 0) {
-					
-					newMsg = "I" + msg.Substring(obsName.Length);
+				if (indx != (msg.Length - obsName.Length)) {
+					int strtPoint = indx + obsName.Length;
+					newMsg = msg.Substring (0, indx) + "I" + msg.Substring(strtPoint);
 				} else {
 					newMsg = msg.Substring (0, indx) + "me";
 				}
@@ -105,14 +106,14 @@ public class Observer : MonoBehaviour {
 		pos.y = 1.5f;
 		for(var i = 0; i < 30; i++)
 		{
-			if (Physics.Raycast (pos, direction, out hit, 30)) {
+			if (Physics.Raycast (pos, direction, out hit, visionFieldLength)) {
 				Debug.LogWarning ("Rayhit - " + hit.collider.name + " -for- " + obsName);
 				Debug.DrawLine (pos, hit.collider.transform.position, Color.red);
 				string objName = hit.collider.GetComponentInParent<SmartCharacter> ().name;
 				if (!objs.Contains (objName))
 					objs.Add (objName);
 			} else {
-				Debug.DrawLine (pos, pos + direction * 30, Color.green);
+				Debug.DrawLine (pos, pos + direction * visionFieldLength, Color.green);
 			}
 			direction = stepAngle * direction;
 		}

@@ -1,29 +1,60 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 
 /* Messages that are present in the  Message bus are of TraceMessage
  * type. It has the names of actor1 and actor2, and the message.
  */
 
-public class TraceMessage{
+public class TraceMessage {
 
-	string msg, actor1, actor2;
+	string msg;
+	float time;
 
 	public string GetMessage() {
 
 		return msg;
 	}
 
-	public bool HasActorInMsg(string actorName) {
+	public float GetTime() {
 
-		if (actorName.Equals (actor1) || actorName.Equals (actor2))
-			return true;
-		else
-			return false;
+		return time;
 	}
 
-	public TraceMessage (string tMsg, string actorOneName, string actorTwoName) {
-		msg = tMsg;
-		actor1 = actorOneName;
-		actor2 = actorTwoName;
+	public bool HappensDuring (TraceMessage tMsg) {
+
+		return (this.time == tMsg.GetTime ()) ? true : false;
+	}
+
+	public bool HappensBefore (TraceMessage tMsg) {
+
+		return (this.time < tMsg.GetTime ()) ? true : false;
+	}
+
+	public void ConvertToThridPerson (string actorName) {
+
+		if (msg.IndexOf ("I") != -1) {
+			msg = actorName + msg.Substring (1);
+		}
+	}
+
+	public string asString() {
+
+		return time + " " + msg;
+	}
+
+	public TraceMessage (float msgTime, string msg) {
+		this.msg = msg;
+		this.time = msgTime;
+	}
+
+	public bool Equals(TraceMessage tMsg) {
+		
+		if (tMsg == null)
+			return false;
+		if ((this.GetTime() == tMsg.GetTime()) && (this.GetMessage().Equals(tMsg.GetMessage()))) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using TreeSharpPlus;
@@ -11,10 +12,17 @@ namespace BehaviorTrees {
 		public SmartObject affordee;
 		protected List<Condition> preconditions = new List<Condition>();
 		protected List<Condition> effects = new List<Condition>();
+		protected string tag = "";
 
 		public string asString () {
 
 			return this.name;
+		}
+
+		protected void initialize() {
+
+			tag = Constants.affordanceMap.FirstOrDefault (t => t.Value == this.GetType ()).Key;
+			name = affordant.name + " " + tag + " " + affordee.name;
 		}
 
 		public string actionSummary () {
@@ -32,8 +40,9 @@ namespace BehaviorTrees {
 		}
 
 		public void publishMessage () {
-			TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
-			MessageBus.PublishMessage (this.asString (), affordant.name, affordee.name);
+			//TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
+			string msgWithTime = Time.realtimeSinceStartup.ToString("n2") + " " + this.asString();
+			MessageBus.PublishMessage (msgWithTime, affordant.name, affordee.name);
 		}
 
 		public Node PublisMsgNode () {

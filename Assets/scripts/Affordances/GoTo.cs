@@ -17,7 +17,7 @@ public class GoTo : Affordance {
 
 	void initialize() {
 
-		name = affordant.name + " walks_to " + affordee.name;
+		base.initialize ();
 
 		effects.Add (new Condition (affordant.name, "reached", true));
 	}

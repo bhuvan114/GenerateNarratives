@@ -12,4 +12,9 @@ public class MenuScript : MonoBehaviour {
 
 		Constants.MergeMemories = true;
 	}
+
+	public void DisplayMergeMemories () {
+
+		MergeTraceHelper.MergeMemories ();
+	}
 }

@@ -11,7 +11,7 @@ public static class MessageBus {
 	// Contains the entire trace of the narrative in god's-eye point
 	static List<string> trace = new List<string> ();
 
-	static List<TraceMessage> traceMsgs = new List<TraceMessage>();
+	//static List<TraceMessage> traceMsgs = new List<TraceMessage>();
 	static List<string> traceMsgsString = new List<string>();
 	static bool unread = false;
 
@@ -20,7 +20,7 @@ public static class MessageBus {
 	// Function to publish a message. It sets the 'unread' flag to true.
 	public static void PublishMessage(string msg, string actorName1, string actorName2) {
 		
-		traceMsgs.Add (new TraceMessage (msg, actorName1, actorName2));
+		//traceMsgs.Add (new TraceMessage (msg, actorName1, actorName2));
 		//trace = trace + msg;
 		trace.Add(msg);
 		traceMsgsString.Add(msg);
@@ -39,7 +39,7 @@ public static class MessageBus {
 
 	// Returns all the messages that contains an actor
 	// Returns true if such message exists
-	public static bool MsgsContainsActor(string actorName, out List<string> msgText) {
+	/*public static bool MsgsContainsActor(string actorName, out List<string> msgText) {
 
 		msgText = new List<string> ();
 		foreach (TraceMessage tMsg in traceMsgs) {
@@ -52,7 +52,7 @@ public static class MessageBus {
 		else
 			return false;
 		
-	}
+	}*/
 
 	// Checks if the message bus has any new messaages
 	public static bool HasUnreadMsgs() {
@@ -63,7 +63,7 @@ public static class MessageBus {
 	// Resets everything in msg bus except the global trace.
 	public static void ResetMsgBus() {
 		
-		traceMsgs = new List<TraceMessage> ();
+		//traceMsgs = new List<TraceMessage> ();
 		traceMsgsString = new List<string> ();
 		unread = false;
 		killSignal = false;
