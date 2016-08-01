@@ -6,35 +6,102 @@ namespace BehaviorTrees {
 	 * for the affordances. A condition has the actor name, condition name,
 	 * and the state of the condition.
 	 */
-	public class Condition {
-		string actor;
-		string cond;
-		bool status;
-		bool isInit = false;
 
+	//TODO: Change all the code to follow Condition ENUM instead of string
+	public class Condition {
+		protected string actor;
+		protected string condName;
+		protected bool status;
+		protected string relActor = "";
+
+		protected bool isLocation = false;
+
+
+		// Getters
+		public string getActor () {
+		
+			return this.actor;
+		}
+
+		public string getRealtedActor () {
+
+			return this.relActor;
+		}
+
+		public string getConditionName () {
+
+			return this.condName;
+		}
+
+		public bool getStatus () {
+
+			return this.status;
+		}
+
+		public bool IsLocation () {
+
+			return isLocation;
+		}
+
+		// Constructors
+		public Condition () {}
 		public Condition(string actor, string cond, bool status) {
 
 			this.actor = actor;
-			this.cond = cond;
+			this.condName = cond;
 			this.status = status;
 		}
 
-		public Condition(string actor, string cond, bool status, bool isInit) {
+		public Condition(string actor, Constants.ConditionType cond, bool status) {
 
 			this.actor = actor;
-			this.cond = cond;
+			this.condName = cond.ToString ();
 			this.status = status;
-			this.isInit = isInit;
+		}
+
+		public Condition(string actor, Constants.ConditionType cond, string relName, bool status = true) {
+
+			this.actor = actor;
+			this.condName = cond.ToString ();
+			this.relActor = relName;
+			this.status = status;
+		}
+
+		// Operators
+		public bool IsNegation (Condition cond) {
+
+			return ((actor.Equals (cond.getActor ())) && (condName.Equals (cond.getConditionName ())) && (relActor.Equals (cond.getRealtedActor ())) && (!status.Equals (cond.getStatus ())));
+
+		}
+
+		public bool IsLocationContradiction (Condition cond) {
+
+			return ((this.IsLocation () && cond.IsLocation ()) && ((actor.Equals (cond.getActor ())) && (!relActor.Equals (cond.getRealtedActor ()))));
+		}
+
+		public bool IsContradicts(Condition cond) {
+
+			return (this.IsNegation (cond) || this.IsLocationContradiction (cond));
 		}
 
 		public string asString () {
 
-			if (status == false)
+			/*if (status == false)
 				cond = "not-" + cond;
 			if (isInit == true)
 				return actor + " \\ is \\ " + cond + "\n";
 			else
-				return actor + " \\ thus changes \\ " + cond + "\n";
+				return actor + " \\ thus changes \\ " + cond + "\n";*/
+
+			return actor + " " + condName + " " + relActor + " " + status.ToString ();
+		}
+	}
+
+	class Location : Condition {
+
+		public Location(string actor, string location) : base (actor, Constants.ConditionType.AT, location) { 
+		
+			isLocation = true;
 		}
 	}
 }

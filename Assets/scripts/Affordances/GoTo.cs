@@ -19,13 +19,14 @@ public class GoTo : Affordance {
 
 		base.initialize ();
 
-		effects.Add (new Condition (affordant.name, "reached", true));
+		//effects.Add (new Condition (affordant.name, Constants.ConditionType.AT, true));
+		effects.Add (new Location (affordant.name, affordee.name));
 	}
 
 	//PBT for GoTo affordace goes here
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.PublisMsgNode()));
+		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.UpdateAndPublish()));
 	}
 }

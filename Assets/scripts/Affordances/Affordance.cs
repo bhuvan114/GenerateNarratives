@@ -25,6 +25,7 @@ namespace BehaviorTrees {
 			name = affordant.name + " " + tag + " " + affordee.name;
 		}
 
+		/*
 		public string actionSummary () {
 
 			string summary = this.asString ();
@@ -33,22 +34,35 @@ namespace BehaviorTrees {
 			}
 			return summary;	
 		}
-
+*/
+		//TODO : Redundant, Ridiculous, REMOVE!!
 		public void AddSummaryToTrace () {
 
-			Constants.PBT_Trace = Constants.PBT_Trace + this.actionSummary ();
+//			Constants.PBT_Trace = Constants.PBT_Trace + this.actionSummary ();
 		}
 
 		public void publishMessage () {
 			//TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
-			string msgWithTime = Time.realtimeSinceStartup.ToString("n2") + " " + this.asString();
-			MessageBus.PublishMessage (msgWithTime, affordant.name, affordee.name);
+			float time = Time.realtimeSinceStartup;//.ToString("n2");// + " " + this.asString();
+			MessageBus.PublishMessage (new TraceMessage(time, this.asString(), affordant.name, affordee.name));
 		}
 
 		public Node PublisMsgNode () {
 
 			return new LeafInvoke (
 				() => this.publishMessage());
+		}
+
+
+		public Node UpdateNarrativeStateNode () {
+
+			return new LeafInvoke (
+				() => NSM.UpdateNarrativeState (effects));
+		}
+
+		public Node UpdateAndPublish () {
+
+			return new Sequence (this.PublisMsgNode (), this.UpdateNarrativeStateNode ());
 		}
 
 		public bool Equals(Affordance aff) {

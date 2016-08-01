@@ -18,14 +18,12 @@ public class LookAt : Affordance {
 	void initialize() {
 
 		base.initialize ();
-
-		effects.Add (new Condition (affordant.name, "reached", true));
 	}
 
 	//PBT for GoTo affordace goes here
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_OrientTowards(pos), this.PublisMsgNode()));
+		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_OrientTowards(pos), this.UpdateAndPublish()));
 	}
 }

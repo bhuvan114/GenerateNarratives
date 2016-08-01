@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using BehaviorTrees;
 
 /* Messages that are present in the  Message bus are of TraceMessage
  * type. It has the names of actor1 and actor2, and the message.
@@ -7,8 +9,12 @@ using System.Collections.Generic;
 
 public class TraceMessage {
 
-	string msg;
+	string msg, actorOne, actorTwo;
 	float time;
+
+	// Optional Fields
+	List<Condition> actorOneState, actorTwoState;
+	bool hasStateInformation = false;
 
 	public string GetMessage() {
 
@@ -18,6 +24,38 @@ public class TraceMessage {
 	public float GetTime() {
 
 		return time;
+	}
+
+	public string GetActorOneName () {
+
+		return actorOne;
+	}
+
+	public string GetActorTwoName () {
+
+		return actorTwo;
+	}
+
+	public List<Condition> GetActorOneState () {
+
+		return actorOneState;
+	}
+
+	public List<Condition> GetActorTwoState () {
+
+		return actorTwoState;
+	}
+
+	public bool HasActorStates () {
+
+		return hasStateInformation;
+	}
+
+	public void SetActorStates (List<Condition> actorOneState, List<Condition> actorTwoState) {
+
+		this.actorOneState = actorOneState;
+		this.actorTwoState = actorTwoState;
+		hasStateInformation = true;
 	}
 
 	public bool HappensDuring (TraceMessage tMsg) {
@@ -32,19 +70,60 @@ public class TraceMessage {
 
 	public void ConvertToThridPerson (string actorName) {
 
-		if (msg.IndexOf ("I") != -1) {
+		if (msg.IndexOf ("I ") != -1) {
 			msg = actorName + msg.Substring (1);
+		}
+	}
+
+	public bool ConvertToFirstPerson (string actorName) {
+
+		int indx = msg.IndexOf (actorName);
+		if (indx != -1) {
+			string newMsg = msg;
+			if (indx != (msg.Length - actorName.Length)) {
+				int strtPoint = indx + actorName.Length;
+				newMsg = msg.Substring (0, indx) + "I" + msg.Substring(strtPoint);
+			} else {
+				newMsg = msg.Substring (0, indx) + "me";
+			}
+			msg = newMsg;
+			return true;
+		} else {
+			return false;
 		}
 	}
 
 	public string asString() {
 
-		return time + " " + msg;
+		return time.ToString("n2") + " " + msg;
+	}
+
+	void SetUpValues (float msgTime, string msg, string actOne, string actTwo) {
+
+		this.msg = msg;
+		this.time = msgTime;
+		this.actorOne = actOne;
+		this.actorTwo = actTwo;
 	}
 
 	public TraceMessage (float msgTime, string msg) {
-		this.msg = msg;
-		this.time = msgTime;
+
+		int indx1 = msg.IndexOf (' ');
+		int indx2 = msg.Substring (indx1 + 1).IndexOf (' ');
+		string actOne = msg.Substring (0, indx1);
+		string actTwo = msg.Substring (indx2 + 1);
+
+		SetUpValues (msgTime, msg, actOne, actTwo);
+	}
+
+	public TraceMessage (float msgTime, string msg, string actOne, string actTwo) {
+
+		SetUpValues (msgTime, msg, actOne, actTwo);
+	}
+
+	public TraceMessage (TraceMessage tMsg) {
+
+		SetUpValues (tMsg.GetTime (), tMsg.GetMessage (), tMsg.GetActorOneName (), tMsg.GetActorTwoName ());
 	}
 
 	public bool Equals(TraceMessage tMsg) {

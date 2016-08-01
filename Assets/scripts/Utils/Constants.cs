@@ -24,4 +24,11 @@ public static class Constants {
 		{ AFF_TAGS.walks_to.ToString(), typeof(GoTo) },
 		{ AFF_TAGS.looks_at.ToString(), typeof(LookAt) }
 	};
+
+	public enum ConditionType {
+		AT,
+		IS_ALIVE
+	};
+
+	public static Dictionary<string, string> smartObjToGameObjMap = new Dictionary<string, string>();
 }

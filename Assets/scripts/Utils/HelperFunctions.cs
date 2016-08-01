@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using BehaviorTrees;
 
 public static class HelperFunctions{
@@ -46,8 +47,14 @@ public static class HelperFunctions{
 		foreach (string agent in Constants.objsMergeMemories) {
 			tMsgs = new List<TraceMessage> ();
 			string agentFilePath = Constants.traceFilesPath + agent + ".txt";
-			foreach (string line in System.IO.File.ReadAllLines (agentFilePath))
-				tMsgs.Add (HelperFunctions.ConvertToTraceMsg (line));
+			string[] lines = System.IO.File.ReadAllLines (agentFilePath);
+			for (int i = 0; i < lines.Length; i = i + 3) {
+				TraceMessage tMsg = HelperFunctions.ConvertToTraceMsg (lines[i]);
+				tMsg.SetActorStates (GetStateFromStateString (lines [i + 1]), GetStateFromStateString (lines [i + 2]));
+				tMsgs.Add (tMsg);
+			}
+			//foreach (string line in System.IO.File.ReadAllLines (agentFilePath))
+			//	tMsgs.Add (HelperFunctions.ConvertToTraceMsg (line));
 			Constants.agentMemories.Add (agent, tMsgs);
 		}
 	}
@@ -78,5 +85,55 @@ public static class HelperFunctions{
 		foreach (TraceMessage tMsg in tMsgs)
 			txt = txt + " - " + tMsg.GetMessage () + "\n";
 		return txt;
+	}
+
+	public static Condition ConvertStringToCondition (string condStr) {
+
+		Condition cond;
+
+		string[] words = condStr.Split (new char[] { ' ' });
+		string actorOne = words [0];
+		Constants.ConditionType condType = (Constants.ConditionType)System.Enum.Parse (typeof(Constants.ConditionType), words [1]);
+		if (words.Length == 4) {
+			
+			string relActor = words [2];
+			if (condType == Constants.ConditionType.AT)
+				cond =  new Location (actorOne, relActor);
+			else
+				cond = new Condition (actorOne, condType, relActor, System.Convert.ToBoolean (words [3]));
+		} else {
+
+			cond = new Condition (actorOne, condType, System.Convert.ToBoolean (words [2]));
+		}
+		//Debug.Log ("Convert : " + condStr + " - " + cond.asString ());
+		return cond;
+	}
+
+	public static List<Condition> GetStateFromStateString (string stateStr) {
+
+		List<Condition> conds = new List<Condition> ();
+		if (stateStr [0] == '+')
+			stateStr = stateStr.Substring (1);
+		if (stateStr.Length > 0) {
+			string[] condStrs = stateStr.Split (new char[] { ';' });
+			for (int i = 0; i < condStrs.Length; i++) {
+				if (!condStrs [i].Contains (";") && condStrs [i].Length > 0)
+					conds.Add (ConvertStringToCondition (condStrs [i]));
+			}
+		}
+		return conds;
+	}
+
+	public static void CreateSmartObjectToGameObjectMap () {
+		
+		IEnumerable<System.Type> objTypes = System.Reflection.Assembly.GetExecutingAssembly ().GetTypes ()
+			.Where (t => t.BaseType != null && t.BaseType == typeof(BehaviorTrees.SmartObject));
+
+		foreach (System.Type objType in objTypes) {
+
+			SmartObject[] smtObjs = GameObject.FindObjectsOfType (objType) as SmartObject[];
+			foreach (SmartObject obj in smtObjs)
+				Constants.smartObjToGameObjMap.Add (obj.name, obj.gameObject.name);
+		}
 	}
 }

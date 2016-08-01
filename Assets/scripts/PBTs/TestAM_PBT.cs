@@ -19,6 +19,11 @@ public class TestAM_PBT : MonoBehaviour {
 		SmartPlace[] places = GameObject.FindObjectsOfType<SmartPlace> ();
 		List<Node> nodes = new List<Node> ();
 
+		List<Condition> initState = new List<Condition> ();
+		//initState.Add(new Location(agents[0].name, places[0].name));
+		//initState.Add(new Location(agents[0].name, places[1].name));
+		NSM.SetInitialState (initState);
+
 		int j;
 		for (int i = 0; i < agents.Length; i++) {
 			j = Random.Range (1, 100) % agents.Length;

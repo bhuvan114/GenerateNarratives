@@ -35,10 +35,16 @@ public class Observer : MonoBehaviour {
 		// If msg bus has any unread msgs, get them
 		if (MessageBus.HasUnreadMsgs ()) {
 			
-			List<string> msgs = MessageBus.GetMsgsInMsgBus ();
+			List<TraceMessage> msgs = MessageBus.GetMsgsInMsgBus ();
 			msgs = GetMsgsForObserver (msgs);
-			foreach(string msg in msgs)
-				observerTrace.Add (msg);
+			foreach (TraceMessage msg in msgs) {
+				
+				string actOneState = "+" + NSM.GetStateForActorAsString (msg.GetActorOneName ());
+				string actTwoState = "+" + NSM.GetStateForActorAsString (msg.GetActorTwoName ());
+				observerTrace.Add (msg.asString ());
+				observerTrace.Add (actOneState);
+				observerTrace.Add (actTwoState);
+			}
 			msgRead = true;
 		}
 
@@ -58,29 +64,20 @@ public class Observer : MonoBehaviour {
 	 * Input  : List of msgs
 	 * Return : List of msgs in first person.
 	 */
-	List<string> GetMsgsForObserver (List<string> msgs) {
-
-		//Debug.Log ("Name : " + obsName);
-
+	List<TraceMessage> GetMsgsForObserver (List<TraceMessage> tMsgs) {
+		
 		List<string> objs = GetObjectsInFieldOfView ();
-		List<string> observedMsgs = new List<string>();
-		foreach (string msg in msgs) {
-			int indx = msg.IndexOf (obsName);
-			if (indx != -1) {
-				string newMsg = msg;
-				if (indx != (msg.Length - obsName.Length)) {
-					int strtPoint = indx + obsName.Length;
-					newMsg = msg.Substring (0, indx) + "I" + msg.Substring(strtPoint);
-				} else {
-					newMsg = msg.Substring (0, indx) + "me";
-				}
-				observedMsgs.Add (newMsg);
+		List<TraceMessage> observedMsgs = new List<TraceMessage>();
+		foreach (TraceMessage tMsg in tMsgs) {
 
+			TraceMessage msg = new TraceMessage(tMsg);
+			if (msg.ConvertToFirstPerson (obsName)) {
+				observedMsgs.Add (msg);
 			} else {
 				//go through all observers
-				List<string> objsInFOV = GetObjectsInFieldOfView();
+				List<string> objsInFOV = GetObjectsInFieldOfView ();
 				foreach (string obj in objsInFOV) {
-					if ((msg.IndexOf (obj) != -1) && (!observedMsgs.Contains (msg))) {
+					if ((msg.GetActorOneName ().Equals (obj) || msg.GetActorTwoName ().Equals (obj)) && (!observedMsgs.Contains (msg))) {
 						observedMsgs.Add (msg);
 					}
 				}
