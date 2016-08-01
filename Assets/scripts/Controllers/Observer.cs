@@ -104,7 +104,7 @@ public class Observer : MonoBehaviour {
 		for(var i = 0; i < 30; i++)
 		{
 			if (Physics.Raycast (pos, direction, out hit, visionFieldLength)) {
-				Debug.LogWarning ("Rayhit - " + hit.collider.name + " -for- " + obsName);
+				//Debug.LogWarning ("Rayhit - " + hit.collider.name + " -for- " + obsName);
 				Debug.DrawLine (pos, hit.collider.transform.position, Color.red);
 				string objName = hit.collider.GetComponentInParent<SmartCharacter> ().name;
 				if (!objs.Contains (objName))

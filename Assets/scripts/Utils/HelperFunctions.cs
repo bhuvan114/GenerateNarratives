@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using BehaviorTrees;
@@ -135,5 +136,19 @@ public static class HelperFunctions{
 			foreach (SmartObject obj in smtObjs)
 				Constants.smartObjToGameObjMap.Add (obj.name, obj.gameObject.name);
 		}
+	}
+
+	public static Affordance GetAffordanceFromString (string affStr) {
+
+		string[] words = affStr.Split (new char[] { ' ' });
+		GameObject actorOne = GameObject.Find (Constants.smartObjToGameObjMap [words [0]]);
+		GameObject actorTwo = GameObject.Find (Constants.smartObjToGameObjMap [words [2]]);
+		Constants.AFF_TAGS affTag = (Constants.AFF_TAGS)System.Enum.Parse (typeof(Constants.AFF_TAGS), words [1]);
+		System.Type affType = Constants.affordanceMap [affTag];
+
+		ParameterInfo[] pInfo = affType.GetConstructors () [0].GetParameters ();
+
+		Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
+		return aff;
 	}
 }

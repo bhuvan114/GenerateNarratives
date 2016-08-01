@@ -108,12 +108,8 @@ public class TraceMessage {
 
 	public TraceMessage (float msgTime, string msg) {
 
-		int indx1 = msg.IndexOf (' ');
-		int indx2 = msg.Substring (indx1 + 1).IndexOf (' ');
-		string actOne = msg.Substring (0, indx1);
-		string actTwo = msg.Substring (indx2 + 1);
-
-		SetUpValues (msgTime, msg, actOne, actTwo);
+		string[] words = msg.Split(new char[] {' '});
+		SetUpValues (msgTime, msg, words[0], words[2]);
 	}
 
 	public TraceMessage (float msgTime, string msg, string actOne, string actTwo) {

@@ -21,7 +21,7 @@ namespace BehaviorTrees {
 
 		protected void initialize() {
 
-			tag = Constants.affordanceMap.FirstOrDefault (t => t.Value == this.GetType ()).Key;
+			tag = Constants.affordanceMap.FirstOrDefault (t => t.Value == this.GetType ()).Key.ToString ();
 			name = affordant.name + " " + tag + " " + affordee.name;
 		}
 
@@ -35,6 +35,16 @@ namespace BehaviorTrees {
 			return summary;	
 		}
 */
+		public List<Condition> GetEffects () {
+
+			return effects;
+		}
+
+		public List<Condition> GetPreConditions () {
+
+			return preconditions;
+		}
+
 		//TODO : Redundant, Ridiculous, REMOVE!!
 		public void AddSummaryToTrace () {
 

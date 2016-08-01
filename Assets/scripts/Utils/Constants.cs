@@ -14,15 +14,15 @@ public static class Constants {
 	public static List<string> objsMergeMemories = new List<string> ();
 	public static Dictionary<string, List<TraceMessage>> agentMemories = new Dictionary<string, List<TraceMessage>> ();
 
-	enum AFF_TAGS {
+	public enum AFF_TAGS {
 		walks_to,
 		looks_at
 	};
 
-	public static Dictionary<string, System.Type> affordanceMap = new Dictionary<string, System.Type> {
+	public static Dictionary<AFF_TAGS, System.Type> affordanceMap = new Dictionary<AFF_TAGS, System.Type> {
 
-		{ AFF_TAGS.walks_to.ToString(), typeof(GoTo) },
-		{ AFF_TAGS.looks_at.ToString(), typeof(LookAt) }
+		{ AFF_TAGS.walks_to, typeof(GoTo) },
+		{ AFF_TAGS.looks_at, typeof(LookAt) }
 	};
 
 	public enum ConditionType {

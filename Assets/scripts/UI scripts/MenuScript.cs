@@ -15,6 +15,8 @@ public class MenuScript : MonoBehaviour {
 	public void NewMerge () {
 
 		Debug.Log ("Bleh");
+		MergeTraceHelper.SetupSimulationEmvironment ();
+		mergePane.SetActive (false);
 	}
 
 	public void MergeMemories () {

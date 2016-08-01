@@ -8,7 +8,7 @@ namespace BehaviorTrees {
 	 */
 
 	//TODO: Change all the code to follow Condition ENUM instead of string
-	public class Condition {
+	public class Condition : object{
 		protected string actor;
 		protected string condName;
 		protected bool status;
@@ -94,6 +94,24 @@ namespace BehaviorTrees {
 				return actor + " \\ thus changes \\ " + cond + "\n";*/
 
 			return actor + " " + condName + " " + relActor + " " + status.ToString ();
+		}
+
+		public override bool Equals(System.Object obj)
+		{
+			// If parameter cannot be cast to ThreeDPoint return false:
+			Condition c = obj as Condition;
+			if ((object)c == null)
+			{
+				return false;
+			}
+
+			// Return true if the fields match:
+			return asString().Equals(c.asString());
+		}
+
+		public bool Equals (Condition cond) {
+
+			return (this.asString ().Equals (cond.asString ()));
 		}
 	}
 
