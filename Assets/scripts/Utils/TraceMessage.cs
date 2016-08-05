@@ -72,6 +72,7 @@ public class TraceMessage {
 
 		if (msg.IndexOf ("I ") != -1) {
 			msg = actorName + msg.Substring (1);
+			actorOne = actorName;
 		}
 	}
 

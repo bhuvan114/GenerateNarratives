@@ -30,5 +30,9 @@ public static class Constants {
 		IS_ALIVE
 	};
 
+	public static List<string> visualizableAttributes = new List<string> {
+		ConditionType.AT.ToString ()
+	};
+
 	public static Dictionary<string, string> smartObjToGameObjMap = new Dictionary<string, string>();
 }

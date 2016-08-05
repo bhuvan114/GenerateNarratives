@@ -21,6 +21,8 @@ public class GoTo : Affordance {
 
 		//effects.Add (new Condition (affordant.name, Constants.ConditionType.AT, true));
 		effects.Add (new Location (affordant.name, affordee.name));
+		Debug.Log ("Goto pos : " + pos.ToString () + " - " + affordant.name);
+		root = this.PBT ();
 	}
 
 	//PBT for GoTo affordace goes here

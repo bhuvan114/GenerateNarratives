@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TreeSharpPlus;
 
 public class MenuScript : MonoBehaviour {
 
@@ -15,7 +16,12 @@ public class MenuScript : MonoBehaviour {
 	public void NewMerge () {
 
 		Debug.Log ("Bleh");
-		MergeTraceHelper.SetupSimulationEmvironment ();
+		Node treeRoot = MergeTraceHelper.SetupSimulationEmvironment ();
+
+		BehaviorAgent behaviorAgent = new BehaviorAgent (treeRoot);
+		BehaviorManager.Instance.Register (behaviorAgent);
+		behaviorAgent.StartBehavior ();
+
 		mergePane.SetActive (false);
 	}
 

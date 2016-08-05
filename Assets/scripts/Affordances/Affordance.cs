@@ -13,6 +13,7 @@ namespace BehaviorTrees {
 		protected List<Condition> preconditions = new List<Condition>();
 		protected List<Condition> effects = new List<Condition>();
 		protected string tag = "";
+		protected Node root = null;
 
 		public string asString () {
 
@@ -43,6 +44,11 @@ namespace BehaviorTrees {
 		public List<Condition> GetPreConditions () {
 
 			return preconditions;
+		}
+
+		public Node GetPBTRoot () {
+
+			return root;
 		}
 
 		//TODO : Redundant, Ridiculous, REMOVE!!

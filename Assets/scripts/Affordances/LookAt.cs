@@ -18,6 +18,7 @@ public class LookAt : Affordance {
 	void initialize() {
 
 		base.initialize ();
+		root = this.PBT ();
 	}
 
 	//PBT for GoTo affordace goes here

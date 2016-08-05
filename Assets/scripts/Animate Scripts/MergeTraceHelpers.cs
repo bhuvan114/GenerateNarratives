@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using BehaviorTrees;
+using TreeSharpPlus;
 
 public static class MergeTraceHelper {
 
@@ -48,7 +49,7 @@ public static class MergeTraceHelper {
 		return orderedMsgs.OrderBy (tMsg => tMsg.GetTime ()).ToList ();
 	}
 
-	public static void SetupSimulationEmvironment () {
+	public static Node SetupSimulationEmvironment () {
 
 		List<string> objsInKnowledge = new List<string> ();
 		List<Affordance> affs = new List<Affordance> ();
@@ -66,9 +67,10 @@ public static class MergeTraceHelper {
 		List<Condition> startState = new List<Condition>();
 		bool isValid = ValidateNarrativeAndReturnStartState (affs, out startState);
 
-		/*Debug.LogError (isValid.ToString ());
+		//Logs
+		Debug.LogError (isValid.ToString ());
 		foreach (Condition con in startState)
-			Debug.Log (con.asString ());*/
+			Debug.Log (con.asString ());
 
 		//Visualize Start State
 		foreach (Condition cond in startState) {
@@ -78,17 +80,38 @@ public static class MergeTraceHelper {
 				objsInKnowledge.Add (cond.getRealtedActor ());
 		}
 
-		VisualizeStartState (startState, objsInKnowledge);
+		Node treeRoot = null;
+		if (isValid) {
+			VisualizeStartState (startState, objsInKnowledge);
+			treeRoot = BuildNarrativeTree (affs);
+
+			//BehaviorAgent behaviorAgent = new BehaviorAgent (treeRoot);
+			//BehaviorManager.Instance.Register (behaviorAgent);
+			//behaviorAgent.StartBehavior ();
+		}
+
+		return treeRoot;
+	}
+
+	static Node BuildNarrativeTree (List<Affordance> affs) {
+		
+		Node[] pbt = affs.Select (x => x.GetPBTRoot ()).ToArray ();
+		return new Sequence (pbt);
+
 	}
 
 	static void VisualizeStartState (List<Condition> startState, List<string> objs) {
 
-		foreach (string name in objs)
-			Debug.Log (name);
+		//foreach (string obj in objs)
+		//	Debug.LogWarning (obj);
 
 		foreach (string objName in Constants.smartObjToGameObjMap.Keys) {
 			if (!objs.Contains (objName))
 				GameObject.Find (Constants.smartObjToGameObjMap [objName]).SetActive (false);
+		}
+
+		foreach (Condition state in startState) {
+			Visualize.UpdateSceneWithState (state);
 		}
 	}
 
