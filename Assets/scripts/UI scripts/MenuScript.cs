@@ -13,16 +13,29 @@ public class MenuScript : MonoBehaviour {
 		Constants.StartSimulation = true;
 	}
 
-	public void NewMerge () {
-
-		Debug.Log ("Bleh");
-		Node treeRoot = MergeTraceHelper.SetupSimulationEmvironment ();
+	public void Animate (Node treeRoot) {
 
 		BehaviorAgent behaviorAgent = new BehaviorAgent (treeRoot);
 		BehaviorManager.Instance.Register (behaviorAgent);
 		behaviorAgent.StartBehavior ();
 
 		mergePane.SetActive (false);
+	}
+
+	public void ShowStartState () {
+
+		Vector3 oc = new Vector3 (0, 0, 0);
+		Debug.Log ("Bleh" + oc.ToString());
+		Node treeRoot = MergeTraceHelper.SetupSimulationEmvironment ();
+
+		GameObject mergeButton = GameObject.Find ("MergeContinue");
+		Button button = mergeButton.GetComponent<Button> ();
+		button.onClick.RemoveAllListeners ();
+		button.onClick.AddListener (delegate {
+			this.Animate (treeRoot);
+		});
+
+		//mergePane.SetActive (false);
 	}
 
 	public void MergeMemories () {
@@ -41,7 +54,7 @@ public class MenuScript : MonoBehaviour {
 		GameObject mergeButton = GameObject.Find ("MergeContinue");
 		Button button = mergeButton.GetComponent<Button> ();
 		button.onClick.RemoveAllListeners ();
-		button.onClick.AddListener (delegate {this.NewMerge ();});
+		button.onClick.AddListener (delegate {this.ShowStartState ();});
 	}
 
 	public void ResetSelect () {

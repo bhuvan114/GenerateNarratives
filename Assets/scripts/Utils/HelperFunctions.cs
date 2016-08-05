@@ -151,4 +151,13 @@ public static class HelperFunctions{
 		Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
 		return aff;
 	}
+
+	public static string GetConditionsAsString (List<Condition> conds) {
+
+		string txt = "";
+		foreach (Condition cond in conds)
+			txt = txt + cond.asString() + "\n";
+
+		return txt;
+	}
 }

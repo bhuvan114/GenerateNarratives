@@ -121,5 +121,10 @@ namespace BehaviorTrees {
 		
 			isLocation = true;
 		}
+
+		public Location(string actor, Vector3 location) : base(actor, Constants.ConditionType.AT, location.ToString()) {
+
+			isLocation = true;
+		}
 	}
 }

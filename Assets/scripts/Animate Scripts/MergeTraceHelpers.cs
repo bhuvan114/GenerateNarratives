@@ -82,6 +82,10 @@ public static class MergeTraceHelper {
 
 		Node treeRoot = null;
 		if (isValid) {
+
+			Text memoriesTxt = GameObject.Find ("Memories").GetComponent<Text>();
+			memoriesTxt.text = memoriesTxt.text + "\nStart State : \n" + HelperFunctions.GetConditionsAsString (startState);
+
 			VisualizeStartState (startState, objsInKnowledge);
 			treeRoot = BuildNarrativeTree (affs);
 
