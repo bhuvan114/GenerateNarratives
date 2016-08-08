@@ -146,10 +146,17 @@ public static class HelperFunctions{
 		Constants.AFF_TAGS affTag = (Constants.AFF_TAGS)System.Enum.Parse (typeof(Constants.AFF_TAGS), words [1]);
 		System.Type affType = Constants.affordanceMap [affTag];
 
-		ParameterInfo[] pInfo = affType.GetConstructors () [0].GetParameters ();
+		ConstructorInfo[] constrts = affType.GetConstructors ();
 
-		Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
-		return aff;
+
+		foreach (ConstructorInfo constrt in constrts) {
+			ParameterInfo[] pInfo = affType.GetConstructors () [0].GetParameters ();
+			if ((actorOne.GetComponent (pInfo [0].ParameterType) != null) && (actorTwo.GetComponent (pInfo [1].ParameterType) != null)) {
+				Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
+				return aff;
+			}
+		}
+		throw new System.Exception ("No affordance with the given characters!!");
 	}
 
 	public static string GetConditionsAsString (List<Condition> conds) {

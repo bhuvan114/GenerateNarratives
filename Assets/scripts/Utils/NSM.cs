@@ -31,6 +31,9 @@ public static class NSM {
 
 	public static void UpdateNarrativeState (List<Condition> updateConds) {
 
+
+		Debug.Log (HelperFunctions.GetConditionsAsString (updateConds));
+
 		bool isCondAdded = false;
 		foreach (Condition updateCond in updateConds) {
 			for (int i = 0; i < narrativeState.Count; i++) {

@@ -70,9 +70,14 @@ public class TraceMessage {
 
 	public void ConvertToThridPerson (string actorName) {
 
-		if (msg.IndexOf ("I ") != -1) {
+		if (msg.IndexOf ("I ") == 0) {
 			msg = actorName + msg.Substring (1);
 			actorOne = actorName;
+		}
+
+		if (msg.Substring (msg.Length - 2,2).Equals("me")) {
+			msg = msg.Substring (0, msg.Length - 2) + actorName;
+			actorTwo = actorName;
 		}
 	}
 
