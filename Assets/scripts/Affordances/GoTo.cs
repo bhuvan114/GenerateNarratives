@@ -28,7 +28,6 @@ public class GoTo : Affordance {
 	//PBT for GoTo affordace goes here
 	public Node PBT(){
 
-		//TODO : If required, animation code has to be written here
 		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.UpdateAndPublish()));
 	}
 }

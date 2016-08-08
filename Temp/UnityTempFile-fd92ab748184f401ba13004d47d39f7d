@@ -250,6 +250,7 @@
 'Assets/scripts/Affordances/GoTo.cs'
 'Assets/scripts/Affordances/Greet.cs'
 'Assets/scripts/Affordances/LookAt.cs'
+'Assets/scripts/Affordances/Meet.cs'
 'Assets/scripts/Affordances/SpillFood.cs'
 'Assets/scripts/Affordances/Stab.cs'
 'Assets/scripts/Animate Scripts/MergeTraceHelpers.cs'

@@ -25,14 +25,16 @@ public class TestAM_PBT : MonoBehaviour {
 		NSM.SetInitialState (initState);
 
 		int j;
-		for (int i = 0; i < agents.Length; i++) {
+		Meet meetUp = new Meet (agents [0], agents [1]);
+		nodes.Add (meetUp.PBT ());
+		/*for (int i = 0; i < agents.Length; i++) {
 			j = Random.Range (1, 100) % agents.Length;
 			LookAt looksAff = new LookAt (agents [i], places [j]);
 			GoTo goesAff = new GoTo (agents [i], places [i]);
 
 			nodes.Add (looksAff.PBT ());
 			nodes.Add (goesAff.PBT ());
-		}
+		}*/
 		//Actions
 		//GoTo danGoes = new GoTo(daniel, meetPlace1);
 		//GoTo robGoes = new GoTo (robert, meetPlace2);

@@ -16,13 +16,15 @@ public static class Constants {
 
 	public enum AFF_TAGS {
 		walks_to,
-		looks_at
+		looks_at,
+		meets
 	};
 
 	public static Dictionary<AFF_TAGS, System.Type> affordanceMap = new Dictionary<AFF_TAGS, System.Type> {
 
 		{ AFF_TAGS.walks_to, typeof(GoTo) },
-		{ AFF_TAGS.looks_at, typeof(LookAt) }
+		{ AFF_TAGS.looks_at, typeof(LookAt) },
+		{ AFF_TAGS.meets, typeof(Meet) },
 	};
 
 	public enum ConditionType {

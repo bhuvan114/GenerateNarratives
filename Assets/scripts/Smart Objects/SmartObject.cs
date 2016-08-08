@@ -6,8 +6,14 @@ namespace BehaviorTrees {
 	
 	public class SmartObject : MonoBehaviour {
 
-		public string name = "Smart Object";
+		public string name = "";
 		public string relName = "";
+
+		void Start () {
+
+			if (string.IsNullOrEmpty (name))
+				name = this.gameObject.name;
+		}
 
 		// Returns all the supported affordances types of the character
 		public List<System.Type> GetSupportedAffordances() {
