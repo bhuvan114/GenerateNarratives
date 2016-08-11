@@ -128,14 +128,16 @@ public static class MergeTraceHelper {
 			// Adding trace to start state
 			foreach (Condition cond in chronoNarrative[i].GetActorOneState()) {
 				//Debug.Log ("1" + cond.asString ());
-				foreach (Condition state in systemStartState) {
-					if (cond.IsContradicts (state))
-						valid = false;
-				}
+				if (!((affs [i].asString ().IndexOf ("meets") != -1) && cond.IsLocation ())) {
+					foreach (Condition state in systemStartState) {
+						if (cond.IsContradicts (state))
+							valid = false;
+					}
 
-				if (!systemStartState.Contains (cond)) {
-					//Debug.LogError ("+" + cond.asString ());
-					systemStartState.Add (cond);
+					if (!systemStartState.Contains (cond)) {
+						//Debug.LogError ("+" + cond.asString ());
+						systemStartState.Add (cond);
+					}
 				}
 			}
 
@@ -154,37 +156,41 @@ public static class MergeTraceHelper {
 
 
 			//Verifying with affordance
-			foreach (Condition effect in affs[i].GetEffects()) {
-				//Debug.Log ("3" + effect.asString ());
-				foreach (Condition cond in systemStartState) {
-					if (effect.IsContradicts (cond)) {
-						valid = false;
+			//if (affs [i].asString ().IndexOf ("meets")) {
+			//	foreach
+			//} else {
+				foreach (Condition effect in affs[i].GetEffects()) {
+					//Debug.Log ("3" + effect.asString ());
+					foreach (Condition cond in systemStartState) {
+						if (effect.IsContradicts (cond)) {
+							valid = false;
+						}
+					}
+
+					if (systemStartState.Contains (effect)) {
+						//	Debug.LogError ("+" + effect.asString ());
+						//	systemStartState.Add (effect);
+						//} else {
+						//	Debug.LogError ("-" + effect.asString ());
+						systemStartState.Remove (effect);
 					}
 				}
 
-				if (systemStartState.Contains (effect)) {
-				//	Debug.LogError ("+" + effect.asString ());
-				//	systemStartState.Add (effect);
-				//} else {
-				//	Debug.LogError ("-" + effect.asString ());
-					systemStartState.Remove (effect);
-				}
-			}
+				foreach (Condition preCond in affs[i].GetPreConditions()) {
+					//Debug.Log ("4" + preCond.asString ());
+					for (int j = 0; j < systemStartState.Count; j++) {
+						if (preCond.IsContradicts (systemStartState [j])) {
+							//	Debug.LogError ("*" + preCond.asString ());
+							systemStartState [j] = preCond;
+						}
+					}
 
-			foreach (Condition preCond in affs[i].GetPreConditions()) {
-				//Debug.Log ("4" + preCond.asString ());
-				for (int j=0; j<systemStartState.Count;j++) {
-					if (preCond.IsContradicts (systemStartState[j])) {
-					//	Debug.LogError ("*" + preCond.asString ());
-						systemStartState [j] = preCond;
+					if (!systemStartState.Contains (preCond)) {
+						//Debug.LogError ("+" + preCond.asString ());
+						systemStartState.Add (preCond);
 					}
 				}
-
-				if (!systemStartState.Contains (preCond)) {
-					//Debug.LogError ("+" + preCond.asString ());
-					systemStartState.Add (preCond);
-				}
-			}
+			//}
 		}
 		return valid;
 	}

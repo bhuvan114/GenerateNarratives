@@ -19,29 +19,24 @@ public class Meet : Affordance {
 
 		base.initialize ();
 		pos = Val.V (() => affordee.gameObject.transform.position);
-		//effects.Add (new Condition (affordant.name, Constants.ConditionType.AT, true));
-		effects.Add (new Location (affordant.name, pos.Value));
-		//Debug.Log ("Meet pos : " + pos.ToString () + " - " + affordant.name);
 		root = this.PBT ();
 	}
 
-	public void UpdatePositionAndEffects () {
-
-		//pos = affordee.gameObject.transform.position;
-		effects.Add (new Location (affordant.name, pos.Value));
-		Debug.Log ("Bleh pos : " + pos.Value.ToString ());
+	public void UpdateEffects () {
+		
+		effects.Add (new Location (affordant.name, affordant.gameObject.transform.position));
 	}
 
-	public Node PopulateDestinationPosition () {
+	public Node PopulateEffects () {
 
 		return new LeafInvoke (
-			() => this.UpdatePositionAndEffects ());
+			() => this.UpdateEffects ());
 	}
 
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return (new Sequence(/*this.PopulateDestinationPosition(), */this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoToUpToRadius (pos, dist), this.UpdateAndPublish()));
+		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoToUpToRadius (pos, dist),this.PopulateEffects(), this.UpdateAndPublish()));
 	}
 
 }

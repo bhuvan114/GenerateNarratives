@@ -13,6 +13,8 @@ namespace BehaviorTrees {
 		protected string condName;
 		protected bool status;
 		protected string relActor = "";
+		protected bool isPoint = false;
+		protected Vector3 point;
 
 		protected bool isLocation = false;
 
@@ -41,6 +43,16 @@ namespace BehaviorTrees {
 		public bool IsLocation () {
 
 			return isLocation;
+		}
+
+		public bool isPosition () {
+
+			return isPoint;
+		}
+
+		public Vector3 GetPosition () {
+
+			return point;
 		}
 
 		// Constructors
@@ -117,14 +129,26 @@ namespace BehaviorTrees {
 
 	class Location : Condition {
 
+
 		public Location(string actor, string location) : base (actor, Constants.ConditionType.AT, location) { 
 		
 			isLocation = true;
+			if (IsLocationPoint (location)) {
+				isPoint = true;
+				point = HelperFunctions.ConvertStringToVector3 (location);
+			}
 		}
 
 		public Location(string actor, Vector3 location) : base(actor, Constants.ConditionType.AT, location.ToString()) {
 
 			isLocation = true;
+			isPoint = true;
+			point = location;
+		}
+
+		bool IsLocationPoint (string location) {
+
+			return (location.IndexOf ('(') != -1 ? true : false);
 		}
 	}
 }

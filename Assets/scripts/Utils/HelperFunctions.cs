@@ -92,10 +92,27 @@ public static class HelperFunctions{
 
 		Condition cond;
 
+
 		string[] words = condStr.Split (new char[] { ' ' });
 		string actorOne = words [0];
 		Constants.ConditionType condType = (Constants.ConditionType)System.Enum.Parse (typeof(Constants.ConditionType), words [1]);
-		if (words.Length == 4) {
+		if (words.Length > 4) {
+
+			//Dave AT (2.0, 0.1, 10.2) True;
+			int strtIndx, endIndx, len;
+			strtIndx = condStr.IndexOf ('(');
+			endIndx = condStr.IndexOf (')');
+			len = endIndx - strtIndx + 1;
+			Vector3 pos = ConvertStringToVector3 (condStr.Substring (strtIndx, len));
+			if (condType == Constants.ConditionType.AT) {
+				cond = new Location (actorOne, pos);
+			} else {
+				cond = new Condition (actorOne, condType, pos.ToString (), System.Convert.ToBoolean (words [words.Length - 1]));
+			}
+
+			Debug.LogError ("In str to cond : " + cond.asString ());
+
+		} else if (words.Length == 4) {
 			
 			string relActor = words [2];
 			if (condType == Constants.ConditionType.AT)
@@ -166,5 +183,15 @@ public static class HelperFunctions{
 			txt = txt + cond.asString() + "\n";
 
 		return txt;
+	}
+
+	public static Vector3 ConvertStringToVector3(string positionString) {
+
+		Vector3 pos = new Vector3 (0, 0, 0);
+		string[] words = positionString.Split (new char[]{ ',' });
+		pos.x = System.Convert.ToSingle (words [0].Substring (1));
+		pos.y = System.Convert.ToSingle (words [1].Substring (1));
+		pos.z = System.Convert.ToSingle (words [2].Substring (1, words[2].Length-2));
+		return pos;
 	}
 }

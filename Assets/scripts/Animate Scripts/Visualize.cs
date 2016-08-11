@@ -9,11 +9,21 @@ public static class Visualize {
 		Constants.ConditionType condType = (Constants.ConditionType)System.Enum.Parse (typeof(Constants.ConditionType), state.getConditionName ());
 		switch (condType) {
 		case Constants.ConditionType.AT:
-			MoveObjectToLocation (state.getActor (), state.getRealtedActor ());
+			if (state.isPosition ()) {
+				MoveObjectToLocation (state.getActor (), state.GetPosition ());
+			} else {
+				MoveObjectToLocation (state.getActor (), state.getRealtedActor ());
+			}
 			break;
 		default :
 			break;
 		}
+	}
+
+	static void MoveObjectToLocation (string agentName, Vector3 location) {
+
+		GameObject agentObj = GameObject.Find (Constants.smartObjToGameObjMap [agentName]);
+		agentObj.transform.position = location;
 	}
 
 	static void MoveObjectToLocation (string agentName, string locName) {

@@ -25,8 +25,13 @@ public class TestAM_PBT : MonoBehaviour {
 		NSM.SetInitialState (initState);
 
 		int j;
+		GoTo go = new GoTo (agents [1], places [1]);
 		Meet meetUp = new Meet (agents [0], agents [1]);
+		nodes.Add (go.PBT ());
 		nodes.Add (meetUp.PBT ());
+
+		return new Sequence (nodes.ToArray ());
+
 		/*for (int i = 0; i < agents.Length; i++) {
 			j = Random.Range (1, 100) % agents.Length;
 			LookAt looksAff = new LookAt (agents [i], places [j]);
@@ -41,7 +46,7 @@ public class TestAM_PBT : MonoBehaviour {
 
 
 		//PBT here
-		return new SequenceShuffle (nodes.ToArray());
+		//return new SequenceShuffle (nodes.ToArray());
 	}
 
 
