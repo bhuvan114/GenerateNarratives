@@ -110,7 +110,7 @@ public static class HelperFunctions{
 				cond = new Condition (actorOne, condType, pos.ToString (), System.Convert.ToBoolean (words [words.Length - 1]));
 			}
 
-			Debug.LogError ("In str to cond : " + cond.asString ());
+			//Debug.LogError ("In str to cond : " + cond.asString ());
 
 		} else if (words.Length == 4) {
 			

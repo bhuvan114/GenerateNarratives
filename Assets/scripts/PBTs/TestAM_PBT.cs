@@ -25,28 +25,38 @@ public class TestAM_PBT : MonoBehaviour {
 		NSM.SetInitialState (initState);
 
 		int j;
-		GoTo go = new GoTo (agents [1], places [1]);
+		//GoTo go = new GoTo (agents [1], places [1]);
 		Meet meetUp = new Meet (agents [0], agents [1]);
-		nodes.Add (go.PBT ());
-		nodes.Add (meetUp.PBT ());
+		//nodes.Add (go.PBT ());
 
-		return new Sequence (nodes.ToArray ());
 
-		/*for (int i = 0; i < agents.Length; i++) {
+		//return new Sequence (nodes.ToArray ());
+
+		for (int i = 0; i < 3/*agents.Length*/; i++) {
 			j = Random.Range (1, 100) % agents.Length;
 			LookAt looksAff = new LookAt (agents [i], places [j]);
-			GoTo goesAff = new GoTo (agents [i], places [i]);
+			//GoTo goesAff = new GoTo (agents [i], places [i]);
 
 			nodes.Add (looksAff.PBT ());
-			nodes.Add (goesAff.PBT ());
-		}*/
+			//nodes.Add (goesAff.PBT ());
+		}
+		GoTo goesAff = new GoTo (agents [1], places [1]);
+		nodes.Add (goesAff.PBT ());
+		goesAff = new GoTo (agents [3], places [2]);
+		nodes.Add (goesAff.PBT ());
+		nodes.Add (meetUp.PBT ());
+		goesAff = new GoTo (agents [5], places [5]);
+		nodes.Add (goesAff.PBT ());
+		//goesAff = new GoTo (agents [0], places [3]);
+		//nodes.Add (goesAff.PBT ());
+
 		//Actions
 		//GoTo danGoes = new GoTo(daniel, meetPlace1);
 		//GoTo robGoes = new GoTo (robert, meetPlace2);
 
 
 		//PBT here
-		//return new SequenceShuffle (nodes.ToArray());
+		return new Sequence (nodes.ToArray());
 	}
 
 
