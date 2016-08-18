@@ -26,7 +26,7 @@ public static class HelperFunctions{
 
 		string[] words;
 		Regex regex = new Regex ("(/|\\\\|\\.)+");
-		string[] traceFiles = System.IO.Directory.GetFiles (Constants.traceFilesPath, "*.txt");
+		string[] traceFiles = System.IO.Directory.GetFiles (Constants.traceFilesPath, "*.bin");
 		foreach (string file in traceFiles) {
 			words = regex.Split (file);
 			Constants.objsWithMemories.Add(words[words.Length-3]);
@@ -43,20 +43,21 @@ public static class HelperFunctions{
 
 	public static void PopulateAgentStories () {
 
-		Constants.agentMemories = new Dictionary<string, List<TraceMessage>> ();
-		List<TraceMessage> tMsgs;
+		Constants.agentMemories = new Dictionary<string, List<EventMemory>> ();
+		List<EventMemory> mems;
 		foreach (string agent in Constants.objsMergeMemories) {
-			tMsgs = new List<TraceMessage> ();
-			string agentFilePath = Constants.traceFilesPath + agent + ".txt";
-			string[] lines = System.IO.File.ReadAllLines (agentFilePath);
-			for (int i = 0; i < lines.Length; i = i + 3) {
-				TraceMessage tMsg = HelperFunctions.ConvertToTraceMsg (lines[i]);
-				tMsg.SetActorStates (GetStateFromStateString (lines [i + 1]), GetStateFromStateString (lines [i + 2]));
-				tMsgs.Add (tMsg);
+			mems = new List<EventMemory> ();
+			string agentFilePath = Constants.traceFilesPath + agent + ".bin";
+			//deserialize
+			using (System.IO.Stream stream = System.IO.File.Open(agentFilePath, System.IO.FileMode.Open))
+			{
+				var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+				mems = (List<EventMemory>)bformatter.Deserialize(stream);
 			}
 			//foreach (string line in System.IO.File.ReadAllLines (agentFilePath))
 			//	tMsgs.Add (HelperFunctions.ConvertToTraceMsg (line));
-			Constants.agentMemories.Add (agent, tMsgs);
+			Constants.agentMemories.Add (agent, mems);
 		}
 	}
 
@@ -65,8 +66,8 @@ public static class HelperFunctions{
 		string txt = "";
 		foreach (string key in Constants.agentMemories.Keys) {
 			txt = txt + key + " : \n";
-			foreach (TraceMessage msg in Constants.agentMemories[key])
-				txt = txt + " - " + msg.asString() + "\n";
+			foreach (EventMemory memEve in Constants.agentMemories[key])
+				txt = txt + " - " + memEve.GetMessage () + "\n";
 		}
 		return txt;
 	}
@@ -80,11 +81,11 @@ public static class HelperFunctions{
 		return new TraceMessage (time, msgStr);
 	}
 
-	public static string GetTraceMsgsAsString (List<TraceMessage> tMsgs) {
+	public static string GetAgentMemoriesAsString (List<EventMemory> tMems) {
 
 		string txt = "";
-		foreach (TraceMessage tMsg in tMsgs)
-			txt = txt + " - " + tMsg.GetMessage () + "\n";
+		foreach (EventMemory tMem in tMems)
+			txt = txt + " - " + tMem.GetMessage () + "\n";
 		return txt;
 	}
 
@@ -142,16 +143,21 @@ public static class HelperFunctions{
 		return conds;
 	}
 
-	public static void CreateSmartObjectToGameObjectMap () {
-		
+	public static void CreateSmartObjectAndGameObjectMap () {
+
+		Constants.smartObjToGameObjMap = new Dictionary<string, string> ();
+		Constants.gameObjToSmartObjMap = new Dictionary<string, string> ();
+
 		IEnumerable<System.Type> objTypes = System.Reflection.Assembly.GetExecutingAssembly ().GetTypes ()
 			.Where (t => t.BaseType != null && t.BaseType == typeof(BehaviorTrees.SmartObject));
 
 		foreach (System.Type objType in objTypes) {
 
 			SmartObject[] smtObjs = GameObject.FindObjectsOfType (objType) as SmartObject[];
-			foreach (SmartObject obj in smtObjs)
+			foreach (SmartObject obj in smtObjs) {
 				Constants.smartObjToGameObjMap.Add (obj.name, obj.gameObject.name);
+				Constants.gameObjToSmartObjMap.Add (obj.gameObject.name, obj.name);
+			}
 		}
 	}
 
@@ -165,15 +171,16 @@ public static class HelperFunctions{
 
 		ConstructorInfo[] constrts = affType.GetConstructors ();
 
-
-		foreach (ConstructorInfo constrt in constrts) {
-			ParameterInfo[] pInfo = affType.GetConstructors () [0].GetParameters ();
-			if ((actorOne.GetComponent (pInfo [0].ParameterType) != null) && (actorTwo.GetComponent (pInfo [1].ParameterType) != null)) {
-				Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
-				return aff;
+		if ((actorOne != null) && (actorTwo != null)) {
+			foreach (ConstructorInfo constrt in constrts) {
+				ParameterInfo[] pInfo = affType.GetConstructors () [0].GetParameters ();
+				if ((actorOne.GetComponent (pInfo [0].ParameterType) != null) && (actorTwo.GetComponent (pInfo [1].ParameterType) != null)) {
+					Affordance aff = (Affordance)System.Activator.CreateInstance (Constants.affordanceMap [affTag], actorOne.GetComponent (pInfo [0].ParameterType), actorTwo.GetComponent (pInfo [1].ParameterType));
+					return aff;
+				}
 			}
 		}
-		throw new System.Exception ("No affordance with the given characters!!");
+		throw new System.Exception ("No affordance '" + words[1] + "' with the given characters!!");
 	}
 
 	public static string GetConditionsAsString (List<Condition> conds) {

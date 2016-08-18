@@ -8,7 +8,7 @@ using TreeSharpPlus;
 
 public static class MergeTraceHelper {
 
-	static List<TraceMessage> chronoNarrative = new List<TraceMessage>();
+	static List<EventMemory> chronoNarrative = new List<EventMemory>();
 
 	/*public void GetAgentsWithTrace () {
 
@@ -24,7 +24,7 @@ public static class MergeTraceHelper {
 
 
 		Text memoriesTxt = GameObject.Find ("Memories").GetComponent<Text>();
-		memoriesTxt.text = HelperFunctions.GetTraceMsgsAsString (chronoNarrative);
+		memoriesTxt.text = HelperFunctions.GetAgentMemoriesAsString (chronoNarrative);
 	}
 
 	public static void ConvertAllMemoriesTo3P () {
@@ -36,17 +36,17 @@ public static class MergeTraceHelper {
 		}
 	}
 
-	public static List<TraceMessage> ChronologicalMerge () {
+	public static List<EventMemory> ChronologicalMerge () {
 
-		List<TraceMessage> orderedMsgs = new List<TraceMessage> ();
+		List<EventMemory> orderedMems = new List<EventMemory> ();
 		foreach (string key in Constants.agentMemories.Keys) {
-			foreach (TraceMessage msg in Constants.agentMemories[key]) {
-				if (!orderedMsgs.Any(tMsg => tMsg.asString() == msg.asString())) {
-					orderedMsgs.Add (msg);
+			foreach (EventMemory memEve in Constants.agentMemories[key]) {
+				if (!orderedMems.Any (tMem => tMem.GetShortMemory () == memEve.GetShortMemory ())) {
+					orderedMems.Add (memEve);
 				}
 			}
 		}
-		return orderedMsgs.OrderBy (tMsg => tMsg.GetTime ()).ToList ();
+		return orderedMems.OrderBy (tMems => tMems.GetTimeStamp ()).ToList ();
 	}
 
 	public static Node SetupSimulationEmvironment () {
@@ -55,7 +55,7 @@ public static class MergeTraceHelper {
 		List<Affordance> affs = new List<Affordance> ();
 
 		//Create Affordances & populate agents in knowledge
-		foreach (TraceMessage msg in chronoNarrative) {
+		foreach (EventMemory msg in chronoNarrative) {
 			affs.Add (HelperFunctions.GetAffordanceFromString (msg.GetMessage ()));
 			if (!objsInKnowledge.Contains (msg.GetActorOneName ()))
 				objsInKnowledge.Add (msg.GetActorOneName ());

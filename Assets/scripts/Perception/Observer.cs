@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 public class Observer : MonoBehaviour {
 
-	List<string> observerTrace = new List<string>();
+	List<EventMemory> observerMemories = new List<EventMemory>();
 	string obsName;
 	bool msgRead = false;
 	int visionFieldLength = 30;
@@ -35,15 +35,19 @@ public class Observer : MonoBehaviour {
 		// If msg bus has any unread msgs, get them
 		if (MessageBus.HasUnreadMsgs ()) {
 			
-			List<TraceMessage> msgs = MessageBus.GetMsgsInMsgBus ();
+			List<EventMemory> msgs = MessageBus.GetMsgsInMsgBus ();
 			msgs = GetMsgsForObserver (msgs);
-			foreach (TraceMessage msg in msgs) {
-				
-				string actOneState = "+" + NSM.GetStateForActorAsString (msg.GetActorOneName ());
-				string actTwoState = "+" + NSM.GetStateForActorAsString (msg.GetActorTwoName ());
-				observerTrace.Add (msg.asString ());
-				observerTrace.Add (actOneState);
-				observerTrace.Add (actTwoState);
+			foreach (EventMemory msg in msgs) {
+
+				Vector3 act1_pos = GameObject.Find (Constants.smartObjToGameObjMap [msg.GetActorOneName ()]).transform.position;
+				Vector3 act2_pos = GameObject.Find (Constants.smartObjToGameObjMap [msg.GetActorTwoName ()]).transform.position;
+				PerceptionInfo perInfo = new PerceptionInfo ();
+				perInfo.SetVisionData (new VisualPercptionData (act1_pos, act2_pos));
+
+				msg.SetPerceptionInfo (perInfo);	
+				msg.SetActorOneState (NSM.GetStateForActor (msg.GetActorOneName ()));
+				msg.SetActorTwoState (NSM.GetStateForActor (msg.GetActorTwoName ()));
+				observerMemories.Add (msg);
 			}
 			msgRead = true;
 		}
@@ -64,13 +68,13 @@ public class Observer : MonoBehaviour {
 	 * Input  : List of msgs
 	 * Return : List of msgs in first person.
 	 */
-	List<TraceMessage> GetMsgsForObserver (List<TraceMessage> tMsgs) {
+	List<EventMemory> GetMsgsForObserver (List<EventMemory> tMsgs) {
 		
 		List<string> objs = GetObjectsInFieldOfView ();
-		List<TraceMessage> observedMsgs = new List<TraceMessage>();
-		foreach (TraceMessage tMsg in tMsgs) {
+		List<EventMemory> observedMsgs = new List<EventMemory>();
+		foreach (EventMemory tMsg in tMsgs) {
 
-			TraceMessage msg = new TraceMessage(tMsg);
+			EventMemory msg = new EventMemory(tMsg);
 			if (msg.ConvertToFirstPerson (obsName)) {
 				observedMsgs.Add (msg);
 			} else {
@@ -104,11 +108,21 @@ public class Observer : MonoBehaviour {
 		for(var i = 0; i < 30; i++)
 		{
 			if (Physics.Raycast (pos, direction, out hit, visionFieldLength)) {
-				//Debug.LogWarning ("Rayhit - " + hit.collider.name + " -for- " + obsName);
-				Debug.DrawLine (pos, hit.collider.transform.position, Color.red);
-				string objName = hit.collider.GetComponentInParent<SmartCharacter> ().name;
-				if (!objs.Contains (objName))
-					objs.Add (objName);
+				
+				if (hit.collider.gameObject.CompareTag ("SmartObject")) {
+					Debug.DrawLine (pos, hit.collider.transform.position, Color.red);
+					string objName = Constants.gameObjToSmartObjMap [hit.collider.gameObject.name];
+					if (!objs.Contains (objName))
+						objs.Add (objName);
+				} else if (hit.collider.gameObject.name.Equals ("ContextObject")) {
+					Debug.DrawLine (pos, hit.collider.transform.position, Color.red);
+					string objName = hit.collider.GetComponentInParent<SmartCharacter> ().name;
+					if (!objs.Contains (objName))
+						objs.Add (objName);
+				} else {
+					Debug.DrawLine (pos, hit.collider.transform.position, Color.green);
+				}
+
 			} else {
 				Debug.DrawLine (pos, pos + direction * visionFieldLength, Color.green);
 			}
@@ -121,11 +135,24 @@ public class Observer : MonoBehaviour {
 	// Saves the observer trace to a text file
 	public void SaveObserverTrace () {
 
-		Debug.Log ("Observer " + obsName + " : ");
-		string fileName = Constants.traceFilesPath + obsName + ".txt";
-		string[] msgList = observerTrace.ToArray ();
+		string fileName = Constants.traceFilesPath + obsName + ".bin";
+		using (System.IO.Stream stream = System.IO.File.Open(fileName, System.IO.FileMode.Create))
+		{
+			var bformatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+
+			bformatter.Serialize(stream, observerMemories);
+		}
+
+		//Debug log of the obsertrace
+		string trace = "";
+		Debug.Log ("Observer " + obsName + " : \n" + trace);
+		foreach (EventMemory memEve in observerMemories)
+			memEve.PrintTallMemory ();
+			//trace = trace + memEve.GetMessage () + "\n"; 
+		//Debug.Log ("Observer " + obsName + " : \n" + trace);
+		/*string[] msgList = observerTrace.ToArray ();
 		System.IO.File.WriteAllLines (fileName, msgList);
 		foreach (string msg in msgList)
-			Debug.Log (msg);
+			Debug.Log (msg);*/
 	}
 }

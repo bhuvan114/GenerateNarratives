@@ -57,16 +57,30 @@ namespace BehaviorTrees {
 //			Constants.PBT_Trace = Constants.PBT_Trace + this.actionSummary ();
 		}
 
-		public void publishMessage () {
+		public void publishStartMessage () {
 			//TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
 			float time = Time.realtimeSinceStartup;//.ToString("n2");// + " " + this.asString();
-			MessageBus.PublishMessage (new TraceMessage(time, this.asString(), affordant.name, affordee.name));
+			EventStartMemory startMem = new EventStartMemory(time, this.asString(), affordant.name, affordee.name);
+			MessageBus.PublishMessage ((EventMemory) startMem);
 		}
 
-		public Node PublisMsgNode () {
+		public Node PublisEventStartMsg () {
 
 			return new LeafInvoke (
-				() => this.publishMessage());
+				() => this.publishStartMessage());
+		}
+
+		public void publishEndMessage () {
+			//TraceMessage msg = new TraceMessage (this.asString (), affordant.name, affordee.name);
+			float time = Time.realtimeSinceStartup;//.ToString("n2");// + " " + this.asString();
+			EventEndMemory endMem = new EventEndMemory(time, this.asString(), affordant.name, affordee.name);
+			MessageBus.PublishMessage ((EventMemory) endMem);
+		}
+
+		public Node PublisEndMsgNode () {
+
+			return new LeafInvoke (
+				() => this.publishEndMessage());
 		}
 
 
@@ -76,9 +90,9 @@ namespace BehaviorTrees {
 				() => NSM.UpdateNarrativeState (effects));
 		}
 
-		public Node UpdateAndPublish () {
+		public Node UpdateAndPublishEndMsg () {
 
-			return new Sequence (this.PublisMsgNode (), this.UpdateNarrativeStateNode ());
+			return new Sequence (this.UpdateNarrativeStateNode (), this.PublisEndMsgNode ());
 		}
 
 		public bool Equals(Affordance aff) {

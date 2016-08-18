@@ -21,13 +21,13 @@ public class GoTo : Affordance {
 
 		//effects.Add (new Condition (affordant.name, Constants.ConditionType.AT, true));
 		effects.Add (new Location (affordant.name, affordee.name));
-		Debug.Log ("Goto pos : " + pos.ToString () + " - " + affordant.name);
+		//Debug.Log ("Goto pos : " + pos.ToString () + " - " + affordant.name);
 		root = this.PBT ();
 	}
 
 	//PBT for GoTo affordace goes here
 	public Node PBT(){
 
-		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.UpdateAndPublish()));
+		return (new Sequence(this.PublisEventStartMsg(), this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoTo (pos), this.UpdateAndPublishEndMsg()));
 	}
 }

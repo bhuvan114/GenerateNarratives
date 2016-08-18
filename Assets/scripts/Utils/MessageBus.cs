@@ -9,16 +9,16 @@ using System.Collections.Generic;
 public static class MessageBus {
 
 	// Contains the entire trace of the narrative in god's-eye point
-	static List<TraceMessage> trace = new List<TraceMessage> ();
+	static List<EventMemory> trace = new List<EventMemory> ();
 
 	//static List<TraceMessage> traceMsgs = new List<TraceMessage>();
-	static List<TraceMessage> traceMsgsTemp = new List<TraceMessage>();
+	static List<EventMemory> traceMsgsTemp = new List<EventMemory>();
 	static bool unread = false;
 
 	public static bool killSignal = false;
 
 	// Function to publish a message. It sets the 'unread' flag to true.
-	public static void PublishMessage(TraceMessage msg) {//string msg, string actorName1, string actorName2) {
+	public static void PublishMessage(EventMemory msg) {//string msg, string actorName1, string actorName2) {
 		
 		//traceMsgs.Add (new TraceMessage (msg, actorName1, actorName2));
 		//trace = trace + msg;
@@ -26,13 +26,13 @@ public static class MessageBus {
 		traceMsgsTemp.Add(msg);
 		unread = true;
 
-		Debug.Log ("Message Bus : " + msg.asString());
+		Debug.Log ("Message Bus : " + msg.GetMessage ());
 
 		//Debug.Log ("Message Bus trace : \n" + trace);
 	}
 
 	// Returns the new unread message
-	public static List<TraceMessage> GetMsgsInMsgBus () {
+	public static List<EventMemory> GetMsgsInMsgBus () {
 
 		return traceMsgsTemp;
 	}
@@ -64,7 +64,7 @@ public static class MessageBus {
 	public static void ResetMsgBus() {
 		
 		//traceMsgs = new List<TraceMessage> ();
-		traceMsgsTemp = new List<TraceMessage> ();
+		traceMsgsTemp = new List<EventMemory> ();
 		unread = false;
 		killSignal = false;
 	}
@@ -73,8 +73,8 @@ public static class MessageBus {
 	public static void SaveTraces() {
 
 		Debug.Log ("Global trace");
-		foreach (TraceMessage msg in trace) {
-			Debug.Log (msg.asString() + "\n");
+		foreach (EventMemory msg in trace) {
+			Debug.Log (msg.GetMessage() + "\n");
 		}
 		killSignal = true;
 	}

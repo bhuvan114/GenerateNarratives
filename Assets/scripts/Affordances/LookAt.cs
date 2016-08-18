@@ -25,6 +25,6 @@ public class LookAt : Affordance {
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_OrientTowards(pos), this.UpdateAndPublish()));
+		return (new Sequence(this.PublisEventStartMsg(), this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_OrientTowards(pos), this.UpdateAndPublishEndMsg()));
 	}
 }

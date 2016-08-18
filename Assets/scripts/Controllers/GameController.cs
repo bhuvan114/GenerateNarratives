@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour {
 	void Start () {
 
 		HelperFunctions.GetAgentsWithTrace ();
-		HelperFunctions.CreateSmartObjectToGameObjectMap ();
+		HelperFunctions.CreateSmartObjectAndGameObjectMap ();
 		behaviorAgent = null;
 		Time.timeScale = 0f;
 		cameraController = GameObject.FindGameObjectWithTag ("MainCamera").GetComponent<CameraController> ();

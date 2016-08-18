@@ -12,7 +12,7 @@ public static class Constants {
 	public static bool ShowMergePane = false;
 	public static List<string> objsWithMemories = new List<string> ();
 	public static List<string> objsMergeMemories = new List<string> ();
-	public static Dictionary<string, List<TraceMessage>> agentMemories = new Dictionary<string, List<TraceMessage>> ();
+	public static Dictionary<string, List<EventMemory>> agentMemories = new Dictionary<string, List<EventMemory>> ();
 
 	public enum AFF_TAGS {
 		walks_to,
@@ -37,4 +37,5 @@ public static class Constants {
 	};
 
 	public static Dictionary<string, string> smartObjToGameObjMap = new Dictionary<string, string>();
+	public static Dictionary<string, string> gameObjToSmartObjMap = new Dictionary<string, string>();
 }

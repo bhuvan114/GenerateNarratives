@@ -19,10 +19,11 @@ public class Meet : Affordance {
 
 		base.initialize ();
 		pos = Val.V (() => affordee.gameObject.transform.position);
+		effects.Add (new Location (affordant.name, affordee.name));
 		root = this.PBT ();
 	}
 
-	public void UpdateEffects () {
+	/*public void UpdateEffects () {
 		
 		effects.Add (new Location (affordant.name, affordant.gameObject.transform.position));
 	}
@@ -31,12 +32,12 @@ public class Meet : Affordance {
 
 		return new LeafInvoke (
 			() => this.UpdateEffects ());
-	}
+	}*/
 
 	public Node PBT(){
 
 		//TODO : If required, animation code has to be written here
-		return (new Sequence(this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoToUpToRadius (pos, dist),this.PopulateEffects(), this.UpdateAndPublish()));
+		return (new Sequence(this.PublisEventStartMsg(), this.affordant.gameObject.GetComponent<BehaviorMecanim> ().Node_GoToUpToRadius (pos, dist), this.UpdateAndPublishEndMsg()));
 	}
 
 }

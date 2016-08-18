@@ -7,14 +7,14 @@ namespace BehaviorTrees {
 	 * and the state of the condition.
 	 */
 
-	//TODO: Change all the code to follow Condition ENUM instead of string
+	[System.Serializable]
 	public class Condition : object{
 		protected string actor;
 		protected string condName;
 		protected bool status;
 		protected string relActor = "";
 		protected bool isPoint = false;
-		protected Vector3 point;
+		protected SerializableVector3 point;
 
 		protected bool isLocation = false;
 
@@ -127,6 +127,7 @@ namespace BehaviorTrees {
 		}
 	}
 
+	[System.Serializable]
 	class Location : Condition {
 
 
