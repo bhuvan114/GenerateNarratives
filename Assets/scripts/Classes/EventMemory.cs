@@ -102,6 +102,14 @@ public class EventMemory {
 		return msg;
 	}
 
+	public string GetMessageWithMemoryType () {
+
+		if (isStartEvent)
+			return (msg + " (start)");
+		else
+			return (msg + " (end)");
+	}
+
 	public float GetTimeStamp () {
 
 		return time;
@@ -141,6 +149,22 @@ public class EventMemory {
 	public string GetShortMemory () {
 
 		return time.ToString () + " " + msg;
+	}
+
+	public bool Equals (EventMemory obj)
+	{
+		if (time.Equals (obj.GetTimeStamp ()) && msg.Equals (obj.GetMessage ()) && isStartEvent.Equals (obj.IsStartEvent ()))
+			return true;
+		else
+			return false;
+	}
+
+	public bool Completes (EventMemory obj)
+	{
+		if (msg.Equals (obj.GetMessage ()) && !isStartEvent.Equals (obj.IsStartEvent ()))
+			return true;
+		else
+			return false;
 	}
 
 	// Print all the details of the Memory event

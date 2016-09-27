@@ -84,6 +84,11 @@ public class GameController : MonoBehaviour {
 	
 	}
 
+	void LateUpdate () {
+
+		MessageBus.ResetMsgBus ();
+	}
+
 	public Node BuildTree() {
 
 		//Get your PBT here

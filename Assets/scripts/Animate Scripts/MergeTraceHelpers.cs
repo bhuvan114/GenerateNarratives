@@ -194,4 +194,17 @@ public static class MergeTraceHelper {
 		}
 		return valid;
 	}
+
+	public static float EstimateTimeTakenForAnEvent (EventMemory memory) {
+
+		float time = 0;
+		string[] msg = memory.GetMessage ().Split (new char[]{ ' ' });
+		string eventType = msg [1];
+		if (eventType.Equals (Constants.AFF_TAGS.meets.ToString ()) || eventType.Equals (Constants.AFF_TAGS.walks_to.ToString ())) {
+
+
+		}
+
+		return time;
+	}
 }

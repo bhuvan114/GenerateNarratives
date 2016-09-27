@@ -27,10 +27,10 @@ public class Observer : MonoBehaviour {
 	void Update () {
 
 		// If the msgs in the msg bus are read, set it to false
-		if (msgRead) {
+		/*if (msgRead) {
 			MessageBus.ResetMsgBus ();
 			msgRead = false;
-		}
+		}*/
 
 		// If msg bus has any unread msgs, get them
 		if (MessageBus.HasUnreadMsgs ()) {
@@ -49,7 +49,7 @@ public class Observer : MonoBehaviour {
 				msg.SetActorTwoState (NSM.GetStateForActor (msg.GetActorTwoName ()));
 				observerMemories.Add (msg);
 			}
-			msgRead = true;
+			//msgRead = true;
 		}
 
 

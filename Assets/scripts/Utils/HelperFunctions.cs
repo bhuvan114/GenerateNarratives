@@ -67,7 +67,7 @@ public static class HelperFunctions{
 		foreach (string key in Constants.agentMemories.Keys) {
 			txt = txt + key + " : \n";
 			foreach (EventMemory memEve in Constants.agentMemories[key])
-				txt = txt + " - " + memEve.GetMessage () + "\n";
+				txt = txt + " - " + memEve.GetMessageWithMemoryType () + "\n";
 		}
 		return txt;
 	}
@@ -84,8 +84,9 @@ public static class HelperFunctions{
 	public static string GetAgentMemoriesAsString (List<EventMemory> tMems) {
 
 		string txt = "";
-		foreach (EventMemory tMem in tMems)
+		foreach (EventMemory tMem in tMems) {
 			txt = txt + " - " + tMem.GetMessage () + "\n";
+		}
 		return txt;
 	}
 
