@@ -92,7 +92,9 @@ public class GameController : MonoBehaviour {
 	public Node BuildTree() {
 
 		//Get your PBT here
-		Node PBT = this.gameObject.GetComponent<TestAM_PBT> ().BuildTree ();
+		//Node PBT = this.gameObject.GetComponent<TestAM_PBT> ().BuildTree ();
+		Node PBT = this.gameObject.GetComponent<TestAM_PBT> ().BuildTree_Test1();
+		//Node PBT = this.gameObject.GetComponent<TestAM_PBT> ().BuildTree_Test2();
 		return new Sequence (PBT, this.TerminateTree ());
 	}
 

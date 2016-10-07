@@ -4,22 +4,26 @@ using System.Collections.Generic;
 using BehaviorTrees;
 
 [System.Serializable]
-public class EventMemory {
+public class EventMemory : System.IEquatable<EventMemory> {
 
+	//Affordance aff;
 	PerceptionInfo perceptionData;
 	string msg, actorOne, actorTwo;
-	float time;
+	float startTime = -1, endTime = -1;
 
 	// Optional Fields
 	List<Condition> actorOneState = new List<Condition>();
 	List<Condition> actorTwoState = new List<Condition>();
 	bool hasStateInformation = false;
-	bool isStartEvent = false;
+	bool isStartEvent = false, isTimeEstimated = false, isEstimatedNenory = false;
 
 	void SetUpValues (float msgTime, string msg, string actOne, string actTwo, PerceptionInfo perData, bool isStartEvent) {
 
 		this.msg = msg;
-		this.time = msgTime;
+		if (isStartEvent)
+			this.startTime = msgTime;
+		else
+			this.endTime = msgTime;
 		this.actorOne = actOne;
 		this.actorTwo = actTwo;
 		this.perceptionData = perData;
@@ -73,6 +77,15 @@ public class EventMemory {
 		}
 	}
 
+	public EventMemory CreateCounterPartEstimate () {
+
+		EventMemory estMem = new EventMemory (GetTimeStamp (), GetMessage (), GetActorOneName (), GetActorTwoName (), !IsStartEvent ());
+		estMem.SetIsEstimatedMemory ();
+		estMem.SetStartTime (GetStartTime ());
+		estMem.SetEndTime (GetEndTime ());
+		return estMem;
+	}
+
 	// All setters here
 	public void SetPerceptionInfo (PerceptionInfo perData) {
 
@@ -91,15 +104,65 @@ public class EventMemory {
 		hasStateInformation = true;
 	}
 
+	public void SetStartTime (float time, float minTime = 0f) {
+
+		Debug.Log ("Setstart time for '" + msg + "' : " + time);
+		startTime = (time < minTime) ? minTime : time;
+	}
+
+	public void SetEndTime (float time) {
+
+		endTime = time;
+	}
+
+	public void SetTime (float time, float minTime = 0f) {
+
+		if (isStartEvent)
+			SetStartTime (time, minTime);
+		else
+			SetEndTime (time);
+	}
+
+	public void SetEstimatedTime (float time, float minTime = 0f) {
+
+		if (!isStartEvent)
+			SetStartTime (time, minTime);
+		else
+			SetEndTime (time);
+		isTimeEstimated = true;
+	}
+
+	protected void SetIsEstimatedMemory () {
+
+		isEstimatedNenory = true;
+	}
+
 	// All Getters here
 	public bool IsStartEvent () {
 
 		return isStartEvent;
 	}
 
+	public bool IsTimeEstimated () {
+
+		return isTimeEstimated;
+	}
+
+	public bool IsEstimatedMemory () {
+
+		return isEstimatedNenory;
+	}
+
 	public string GetMessage () {
 
 		return msg;
+	}
+
+	public Constants.AFF_TAGS GetEventTag () {
+
+		string[] words = msg.Split (new char [] { ' ' });
+		Constants.AFF_TAGS tag = (Constants.AFF_TAGS)System.Enum.Parse (typeof(Constants.AFF_TAGS), words [1]);
+		return tag;
 	}
 
 	public string GetMessageWithMemoryType () {
@@ -112,6 +175,7 @@ public class EventMemory {
 
 	public float GetTimeStamp () {
 
+		float time = isStartEvent ? GetStartTime () : GetEndTime ();
 		return time;
 	}
 
@@ -145,15 +209,31 @@ public class EventMemory {
 		return actorTwoState;
 	}
 
+	public float GetStartTime () {
+
+		return startTime;
+	}
+
+	public float GetEndTime () {
+
+		return endTime;
+	}
+
+	public Affordance GetAffordance () {
+
+		//return (aff == null) ? HelperFunctions.GetAffordanceFromString (GetMessage ()) : aff;
+		return HelperFunctions.GetAffordanceFromString (GetMessage ());
+	}
+
 	// Get memory time and message as string
 	public string GetShortMemory () {
 
-		return time.ToString () + " " + msg;
+		return GetTimeStamp ().ToString () + " " + msg;
 	}
 
 	public bool Equals (EventMemory obj)
 	{
-		if (time.Equals (obj.GetTimeStamp ()) && msg.Equals (obj.GetMessage ()) && isStartEvent.Equals (obj.IsStartEvent ()))
+		if (GetTimeStamp ().Equals (obj.GetTimeStamp ()) && msg.Equals (obj.GetMessage ()) && isStartEvent.Equals (obj.IsStartEvent ()))
 			return true;
 		else
 			return false;
@@ -172,7 +252,8 @@ public class EventMemory {
 
 		Debug.Log ("{\n" +
 			" msg : " + msg + ",\n" +
-			"time : " + time.ToString() + ",\n" +
+			"start time : " + startTime.ToString() + ",\n" +
+			"end time : " + endTime.ToString() + ",\n" +
 			"isStartEvent : " + isStartEvent.ToString() + ",\n" +
 			"actor one : " + actorOne + ",\n" +
 			"actor two : " + actorTwo + ",\n" +

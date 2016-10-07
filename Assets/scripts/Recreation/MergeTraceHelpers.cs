@@ -207,4 +207,57 @@ public static class MergeTraceHelper {
 
 		return time;
 	}
+
+	public static List<Affordance> ConvertEventMemoriesToAffordances (List<EventMemory> memories) {
+
+		List<Affordance> affs = new List<Affordance> ();
+		foreach (EventMemory memory in memories)
+			affs.Add (HelperFunctions.GetAffordanceFromString (memory.GetMessage ()));
+		return affs;
+	}
+
+	public static bool ValidateNarrativeCompleteness (List<EventMemory> memories, out List<CausalLink> inCompletes, out List<Condition> startState) {
+
+		bool isComplete = true;
+		List<Affordance> affs = ConvertEventMemoriesToAffordances (memories);
+		inCompletes = new List<CausalLink> ();
+		startState = new List<Condition> ();
+
+		for (int i = memories.Count - 1; i >= 0; i--) {
+
+			foreach (Condition cond in memories[i].GetActorOneState()) {
+
+				for (int j=0; j<startState.Count(); j++) {
+					if (cond.Equals (startState [j])) {
+						startState.RemoveAt (j);
+						break;
+					} else if (cond.IsContradicts(startState[j])) {
+						startState.RemoveAt (j);
+						inCompletes.Add (new CausalLink (affs [i], cond, affs [i + 1]));
+						isComplete = false;
+						break;
+					}
+				}
+				startState.Add (cond);
+			}
+
+			foreach (Condition cond in memories[i].GetActorTwoState()) {
+
+				for (int j=0; j<startState.Count(); j++) {
+					if (cond.Equals (startState [j])) {
+						startState.RemoveAt (j);
+						break;
+					} else if (cond.IsContradicts(startState[j])) {
+						startState.RemoveAt (j);
+						inCompletes.Add (new CausalLink (affs [i], cond, affs [i + 1]));
+						break;
+					}
+				}
+				startState.Add (cond);
+			}
+
+			// Precondition logic here
+		}
+		return isComplete;
+	}
 }

@@ -3,9 +3,10 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using TreeSharpPlus;
+using BehaviorTrees;
 
 namespace BehaviorTrees {
-	public class Affordance {
+	public class Affordance : System.IEquatable<Affordance> {
 
 		public string name = "Action";
 		public SmartObject affordant;
@@ -14,6 +15,7 @@ namespace BehaviorTrees {
 		protected List<Condition> effects = new List<Condition>();
 		protected string tag = "";
 		protected Node root = null;
+		protected bool isStart = false, isEnd = false;
 
 		public string asString () {
 
@@ -49,6 +51,16 @@ namespace BehaviorTrees {
 		public Node GetPBTRoot () {
 
 			return root;
+		}
+
+		public bool IsStart() {
+
+			return isStart;
+		}
+
+		public bool IsEnd () {
+
+			return isEnd;
 		}
 
 		//TODO : Redundant, Ridiculous, REMOVE!!
@@ -104,5 +116,21 @@ namespace BehaviorTrees {
 			else
 				return false;
 		}
+	}
+}
+
+public class StartState : Affordance {
+
+	public StartState (List<Condition> conds) {
+		effects = conds;
+		isStart = true;
+	}
+}
+
+public class EndState : Affordance {
+
+	public EndState (List<Condition> conds) {
+		preconditions = conds;
+		isEnd = true;
 	}
 }

@@ -85,7 +85,7 @@ public static class HelperFunctions{
 
 		string txt = "";
 		foreach (EventMemory tMem in tMems) {
-			txt = txt + " - " + tMem.GetMessage () + "\n";
+			txt = txt + " - " + tMem.GetMessage () + "(" + tMem.GetStartTime () + "," + tMem.GetEndTime () + ")\n";
 		}
 		return txt;
 	}
@@ -191,6 +191,29 @@ public static class HelperFunctions{
 			txt = txt + cond.asString() + "\n";
 
 		return txt;
+	}
+
+	public static float GetTimeToTravel (Vector3 start, Vector3 destination) {
+
+		NavMeshPath path = new NavMeshPath ();
+		if (NavMesh.CalculatePath (start, destination, NavMesh.AllAreas, path)) {
+
+			if (path.corners.Length < 2)
+				return 0;
+			Vector3 previousCorner = path.corners[0];
+			float lengthSoFar = 0.0F;
+			int i = 1;
+			while (i < path.corners.Length) {
+				Vector3 currentCorner = path.corners[i];
+				lengthSoFar += Vector3.Distance(previousCorner, currentCorner);
+				previousCorner = currentCorner;
+				i++;
+			}
+			Debug.LogError (lengthSoFar + " / " + Constants.agentSpeed);
+			return (lengthSoFar / Constants.agentSpeed);
+		} else {
+			return 0;
+		}
 	}
 
 	public static Vector3 ConvertStringToVector3(string positionString) {

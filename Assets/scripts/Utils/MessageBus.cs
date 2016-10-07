@@ -26,7 +26,7 @@ public static class MessageBus {
 		traceMsgsTemp.Add(msg);
 		unread = true;
 
-		Debug.LogError ("Message Bus ("+ traceMsgsTemp.Count +") : "+ msg.GetMessageWithMemoryType ());
+		//Debug.LogError ("Message Bus ("+ traceMsgsTemp.Count +") : "+ msg.GetMessageWithMemoryType ());
 
 		//Debug.Log ("Message Bus trace : \n" + trace);
 	}
