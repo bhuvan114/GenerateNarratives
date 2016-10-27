@@ -203,6 +203,11 @@ public class NarrativeValidator {
 		return inConsistentLinks;
 	}
 
+	public List<CausalLink> GetCausalLinks () {
+
+		return cls;
+	}
+
 	public NarrativeValidator(List<EventMemory> startMems, List<EventMemory> endMems) {
 
 		startMemories = startMems.OrderBy (tMems => tMems.GetTimeStamp ()).ToList ();

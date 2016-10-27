@@ -9,7 +9,7 @@ namespace BehaviorTrees {
 		public string name = "";
 		public string relName = "";
 
-		void Start () {
+		void Awake () {
 
 			if (string.IsNullOrEmpty (name))
 				name = this.gameObject.name;

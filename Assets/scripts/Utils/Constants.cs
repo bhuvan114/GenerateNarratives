@@ -37,6 +37,7 @@ public static class Constants {
 		ConditionType.AT.ToString ()
 	};
 
-	public static Dictionary<string, string> smartObjToGameObjMap = new Dictionary<string, string>();
-	public static Dictionary<string, string> gameObjToSmartObjMap = new Dictionary<string, string>();
+	public static Dictionary<System.Type, List<string>> objectsOfTypeMap = new Dictionary<Type, List<string>> ();
+	public static Dictionary<string, string> smartObjToGameObjMap = new Dictionary<string, string> ();
+	public static Dictionary<string, string> gameObjToSmartObjMap = new Dictionary<string, string> ();
 }

@@ -2,7 +2,7 @@
 using System.Collections;
 
 namespace BehaviorTrees {
-	public class OrderingConstraint {
+	public class OrderingConstraint : System.IEquatable<OrderingConstraint> {
 
 		Affordance aff_1, aff_2;
 

@@ -155,10 +155,13 @@ public static class HelperFunctions{
 		foreach (System.Type objType in objTypes) {
 
 			SmartObject[] smtObjs = GameObject.FindObjectsOfType (objType) as SmartObject[];
+			List<string> objNames = new List<string> ();
 			foreach (SmartObject obj in smtObjs) {
+				objNames.Add (obj.name);
 				Constants.smartObjToGameObjMap.Add (obj.name, obj.gameObject.name);
 				Constants.gameObjToSmartObjMap.Add (obj.gameObject.name, obj.name);
 			}
+			Constants.objectsOfTypeMap.Add (objType, objNames);
 		}
 	}
 
